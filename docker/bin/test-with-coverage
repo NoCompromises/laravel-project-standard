@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+source "`dirname $0`/../../.env"
+
+# when generating coverage, we need xdebug, so we must use the debug container. It's also memory hungry, so we up that limit
+docker exec -it -e "XDEBUG_MODE=coverage" "$COMPOSE_PROJECT_NAME"-php-fpm-debug php -d memory_limit=4G vendor/bin/phpunit --coverage-html=tests/html-coverage "$@"
+
+# as a convenience, we open the coverage report once it's done generating
+open "`dirname $0`/../../tests/html-coverage/index.html"
