@@ -59,7 +59,35 @@ in the staging environment. Once it's ready to go live in production, it is merg
 
 ### Composer
 
-packages we use on every project, scripts, scripts-descriptions, dev vs non-dev, use of auth.json for private packages
+Packages we use in every project:
+
+Non-dev dependencies
+* `bugsnag/bugsnag-laravel`
+* `roave/security-advisories`
+* `spatie/laravel-permission`
+* `owen-it/laravel-auditing`
+
+Dev dependencies
+* `barryvdh/laravel-ide-helper`
+* `doctrine/dbal`
+* `laravel/telescope`
+* `nunomaduro/larastan`
+* `slevomat/coding-standard`
+* `squizlabs/php_codesniffer`
+
+We also move the `laravel/tinker` package into the dev requirements, so it's not installed in production.
+
+Within the `scripts` section of `composer.json`, we make the following changes:
+* Add `ide-helper` generation to the `post-update-cmd`
+* Add `test` and `test-coverage` scripts
+* Add a dedicated `ide-helper-update` script to regenerate everything for that package
+* Add `phpcs` for detecting code standard violation
+* Add `phpcbf` for automatically fixing code standard violations - only used locally, mainly when adding a new rule
+* Add `larastan` for static analysis
+
+The `config` block has code sniffer plugins pre-allowed.
+
+Anytime you add a private package, make sure to add a sanitized config to `auth.example.json`
 
 ### Front end
 
