@@ -91,15 +91,23 @@ Anytime you add a private package, make sure to add a sanitized config to `auth.
 
 ### Front end
 
-npm scripts, stick with Webpack/Mix instead of Vite?
+New Laravel installs default to Vite, but we're still using Webpack on our projects.
+
+Follow the Docker instructions in the README to make sure all npm commands are run through Docker containers.
 
 ### Code Standards
 
-php cs config
+Configured with `phpcs.xml`
+
+PHP Code Sniffer is used, not `php-cs-fixer` or `pint`.
 
 ### Static Analysis
 
-phpstan level 1
+Configured with `phpstan.neon`
+
+Currently, we run all projects at PHPStan level 1. This will be increased gradually.
+
+Both applications AND tests are covered with static analysis.
 
 ### Testing
 
