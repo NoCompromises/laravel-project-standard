@@ -19,6 +19,7 @@
     </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="base64:tnGs4PMYS37KL+9JZrbI8O4E4ejefPOKw8Z1qFKmH3U="/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_DATABASE" value="apptest"/>
