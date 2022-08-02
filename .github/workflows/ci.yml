@@ -32,7 +32,7 @@ jobs:
           key: composer-${{ hashFiles('composer.lock') }}
 
       - name: Install PHP Dependencies
-        run: docker exec project-php-fpm /usr/bin/env sh -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist"
+        run: docker exec project-php-fpm /usr/bin/env sh -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-scripts --no-progress --prefer-dist"
 
       - name: Failure debug
         if: ${{ failure() }}

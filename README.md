@@ -59,6 +59,8 @@ in the staging environment. Once it's ready to go live in production, it is merg
 
 ### Composer
 
+Update the `name` property in `composer.json`.
+
 Packages we use in every project:
 
 Non-dev dependencies
