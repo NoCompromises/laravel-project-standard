@@ -52,8 +52,9 @@ jobs:
       - name: Install JS dependencies
         run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm ci && npm run prod
 
-      - name: Run JS test suite
-        run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm test
+# enable this on the project after adding your first test
+#      - name: Run JS test suite
+#        run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm test
 
       - name: Cache routes
         run: docker exec project-php-fpm ./artisan route:cache
