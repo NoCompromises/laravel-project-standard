@@ -111,7 +111,16 @@ Both applications AND tests are covered with static analysis.
 
 ### Testing
 
-phpunit.xml and what to override, base classes and purpose, different test runners including coverage, seeders, factories
+`phpunit.xml` - normal config for local and CI tests
+* generate an APP_KEY
+* set DB_DATABASE and DB_HOST for mysql-test config in docker-compose.yml
+* add a "do-not-use" for every single .env value that enables communication with an external service
+
+`phpunit-external.xml` - meant to be run separately against real external services
+* Comment out the normal external service overrides from `phpunit.xml`
+* Make sure your local .env has the correct values for running external tests
+
+Copy and overwrite the whole `tests` folder to get the right bootstrapping, test types and base classes.
 
 ### Continuous Integration
 
