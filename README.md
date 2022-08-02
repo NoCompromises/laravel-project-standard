@@ -124,8 +124,10 @@ Copy and overwrite the whole `tests` folder to get the right bootstrapping, test
 
 ### Continuous Integration
 
-Github Action file
+Copy the `.github` folder. Replace references to `project` with your actual project/site name used in `docker-compose.yml`
 
 ### Production
 
-Forge + Envoyer, ChecklyHQ for uptime monitoring
+* Forge for server provisioning, generally on AWS
+* Envoyer for deployment, triggered from Github CI on success for `develop` and `main`
+* ChecklyHQ for uptime monitoring

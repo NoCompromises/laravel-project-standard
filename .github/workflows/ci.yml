@@ -1,0 +1,82 @@
+name: Default Project CI
+
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v1
+
+      - name: Setup default environment
+        run: cp .env.example .env
+
+      - name: Install mkcert
+        run: sudo apt-get update && sudo apt install libnss3-tools && brew install mkcert && mkcert -install
+
+      - name: Generate test certificate
+        run: mkcert -cert-file docker/nginx/project.test.pem -key-file docker/nginx/project.test-key.pem project.test
+
+      - name: Build Docker containers and start them
+        run: docker-compose -f docker-compose.yml up -d
+
+      - name: Check running containers
+        run: docker ps -a
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install PHP Dependencies
+        run: docker exec project-php-fpm /usr/bin/env sh -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist"
+
+      - name: Failure debug
+        if: ${{ failure() }}
+        run: |
+          docker ps -a
+          docker logs --timestamps project-php-fpm
+          docker logs --timestamps project-mysql
+          docker inspect project-php-fpm
+          docker inspect project-mysql
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Install JS dependencies
+        run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm ci && npm run prod
+
+      - name: Run JS test suite
+        run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm test
+
+      - name: Cache routes
+        run: docker exec project-php-fpm ./artisan route:cache
+
+      - name: Cache views
+        run: docker exec project-php-fpm ./artisan view:cache
+
+      - name: Run PHPCS
+        run: docker exec project-php-fpm composer phpcs
+
+      - name: Run Larastan
+        run: docker exec project-php-fpm /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer larastan"
+
+      - name: Run PHP test suite
+        run: docker exec project-php-fpm composer test
+
+#      - name: Check logs if you need to debug a failing test
+#        run: docker exec project-php-fpm cat storage/logs/laravel.log
+
+#      - name: Deploy to staging if develop branch
+#        if: github.ref == 'refs/heads/develop'
+#        run: curl -s ${{ secrets.ENVOYER_STAGING_TRIGGER }}
+
+#      - name: Deploy to prod if master branch
+#        if: github.ref == 'refs/heads/master'
+#        run: curl -s ${{ secrets.ENVOYER_PROD_TRIGGER }}
