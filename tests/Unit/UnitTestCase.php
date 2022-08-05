@@ -8,10 +8,6 @@ use Tests\Concerns\AlertsUnwantedDBAccess;
 use Tests\Concerns\HasTodo;
 use Tests\TestCase;
 
-/**
- * Class UnitTestCase
- * @package Tests\Unit
- */
 abstract class UnitTestCase extends TestCase
 {
     use AlertsUnwantedDBAccess, HasTodo;
