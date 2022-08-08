@@ -14,6 +14,43 @@ of this standard will be tagged. That version can be included in each project th
 project is reviewed, changes introduced in a new version can be easily compared against what version of standards the 
 project is currently using.
 
+## Quickstart
+
+If you want to use this project standard, here is a list of files you need to copy into your project:
+
+* `docker-compose.yml`
+* `docker` folder
+* `.gitgnore`
+* `.github` folder
+* `phpcs.xml`
+* `phpstan.neon`
+* `phpunit.xml` and `phpunit-external.xml`
+
+Modifications are needed to the following files already in a default Laravel install:
+
+* `.env.example` and `.env`
+  * copy from `APP_URL`, `COMPOSER_PROJECT_NAME`, `DOCKER_MYSQL_LOCAL_PORT`, `DOCKER_NGINX_LOCAL_PORT`, and  `DOCKER_SERVER_NAME`
+  * copy `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`
+
+Update your Composer packages and scripts:
+
+* Install non-dev packages: `docker/bin/composer require bugsnag/bugsnag-laravel roave/security-advisories spatie/laravel-permission owen-it/laravel-auditing`
+* Install dev packages: `docker/bin/composer require --dev barryvdh/laravel-ide-helper doctrine/dbal laravel/telescope nunomaduro/larastan slevomat/coding-standard squizlabs/php_codesniffer`
+* Move tinker to dev: `docker/bin/composer require --dev laravel/tinker` (answer YES if you are asked if you want to move)
+* Add the following commands to the `post-update-cmd` script:
+  * `@php artisan ide-helper:generate`
+  * `@php artisan ide-helper:meta`
+* Copy additional sections from `scripts`:
+    * `test` and `test-coverage`
+    * `ide-helper-update`
+    * `phpcs` and `phpcbf`
+    * `larastan`
+
+Normalize your test setup:
+
+In many cases, you can just copy the whole `tests` folder into your project, but it would be a good idea to do a diff of the changes,
+just to make sure something wasn't changed in a newer version of Laravel, or any other desired settings in an existing project aren't reverted.
+
 ## Contents
 
 ### Documentation
@@ -31,22 +68,11 @@ needed on a project-by-project basis.
 
 ### Docker
 
-* `docker-compose.yml`
-* `docker` folder
-  * nginx/Dockerfile - update project name for cert files
-  * nginx/nginx.conf - update project name for cert files
-* Additions and changes to `.env.example` and `.env`
-  * APP_URL - set to be https and include the Docker host port mapping
-  * COMPOSE_PROJECT_NAME
-  * DOCKER_MYSQL_LOCAL_PORT
-  * DOCKER_NGINX_LOCAL_PORT
-  * DOCKER_SERVER_NAME
-  * DB_HOST - set to use Docker mysql service
-  * DB_DATABASE, DB_USERNAME, DB_PASSWORD - set to use Docker mysql service defaults
+Read through `docker-compose.yml` and all files in the `docker` folder for more information. These files are heavily commented.
 
 ### Git
 
-The `.gitignore` file is the Laravel default, with these additions:
+We mainly stick with the default `.gitignore` file, but we remove Homestead and Yarn and add the following items:
 * `docker/nginx/*.pem` - ignores the generated certificate files for Docker
 * `tests/html-coverage` - ignore test coverage output
 
@@ -126,7 +152,7 @@ Copy and overwrite the whole `tests` folder to get the right bootstrapping, test
 
 ### Continuous Integration
 
-Copy the `.github` folder. Replace references to `my-project` with your actual project/site name used in `docker-compose.yml`
+Copy the `.github` folder. Update the `PROJECT_NAME` env variable right at the top to match your actual project/site name used in `docker-compose.yml`
 
 ### Production
 

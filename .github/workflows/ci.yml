@@ -20,7 +20,7 @@ jobs:
         run: sudo apt install libnss3-tools && brew install mkcert && mkcert -install
 
       - name: Generate test certificate
-        run: mkcert -cert-file "docker/nginx/$PROJECT_NAME.test.pem" -key-file "docker/nginx/$PROJECT_NAME.test-key.pem" "$PROJECT_NAME.test"
+        run: mkcert -cert-file "docker/nginx/ssl.pem" -key-file "docker/nginx/key.pem" "$PROJECT_NAME.test"
 
       - name: Build Docker containers and start them
         run: docker-compose -f docker-compose.yml up -d

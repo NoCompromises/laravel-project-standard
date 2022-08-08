@@ -58,7 +58,7 @@ Once `mkcert` is installed, we need to generate our local development root certi
 
 Then, generate the certificates for this project and put them into a location accessible to your docker setup:
 
-`mkcert -cert-file docker/nginx/my-project.test.pem -key-file docker/nginx/my-project.test-key.pem my-project.test`
+`mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.test`
 
 ### Get the project running in Docker
 
