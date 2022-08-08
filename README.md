@@ -126,7 +126,7 @@ Copy and overwrite the whole `tests` folder to get the right bootstrapping, test
 
 ### Continuous Integration
 
-Copy the `.github` folder. Replace references to `project` with your actual project/site name used in `docker-compose.yml`
+Copy the `.github` folder. Replace references to `my-project` with your actual project/site name used in `docker-compose.yml`
 
 ### Production
 

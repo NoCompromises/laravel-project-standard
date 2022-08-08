@@ -26,9 +26,9 @@ To get started with local development, follow these steps. Make sure you run all
 
 ### DNS resolution
 
-> Decide on a local domain to use for this project. Substitute that any place you see `project.test` or `project` below.
+> Decide on a local domain to use for this project. Substitute that any place you see `my-project.test` or `my-project` below.
 
-By default, this project will run on the host `project.test`. This requires some sort of local DNS resolution for that hostname
+By default, this project will run on the host `my-project.test`. This requires some sort of local DNS resolution for that hostname
 to your localhost IP address. One easy way to do this for the entire `.test` top-level domain, is to run a lightweight tool
 called `dnsmasq`. You can install it via Homebrew on a Mac with: `brew install dnsmasq`.
 
@@ -36,7 +36,7 @@ called `dnsmasq`. You can install it via Homebrew on a Mac with: `brew install d
 > `brew services` and see if `dnsmasq` is listed.
 
 If you don't want to run `dnsmasq`, you can also add a manual DNS entry to your `/etc/hosts` file in the form:
-`127.0.0.1 project.test`
+`127.0.0.1 my-project.test`
 
 ### Setting up an SSL certificate
 
@@ -58,7 +58,7 @@ Once `mkcert` is installed, we need to generate our local development root certi
 
 Then, generate the certificates for this project and put them into a location accessible to your docker setup:
 
-`mkcert -cert-file docker/nginx/project.test.pem -key-file docker/nginx/project.test-key.pem project.test`
+`mkcert -cert-file docker/nginx/my-project.test.pem -key-file docker/nginx/my-project.test-key.pem my-project.test`
 
 ### Get the project running in Docker
 
@@ -85,7 +85,7 @@ You can verify that your containers are in a running state with `docker compose 
 The one tool that we don't manage through Docker Compose is `node`/`npm`. The reason is that node only needs to run on demand,
 and not be constantly run in the background while we're doing development.
 
-To build the `node`/`npm` container, run: `docker build -t project-node docker/node`
+To build the `node`/`npm` container, run: `docker build -t my-project-node docker/node`
 
 **Composer licensing**
 
@@ -115,7 +115,7 @@ Run these commands to finish the local development setup
 * `docker/bin/composer run post-create-project-cmd`
 * `docker/bin/artisan migrate --seed`
 
-You're good to go - surf to https://project.test:30080  (or a different host/port if you've configured it)
+You're good to go - surf to https://my-project.test:30080  (or a different host/port if you've configured it)
 
 You can also use any normal database management tools and connect to the database using the port specified in `.env`.
 
@@ -158,7 +158,7 @@ will all have the `-alpine` suffix.
 > If you want to change any of the parameters about MySQL, like the user and password, you'll also need to delete
 > the volumes before bringing up the new containers:
 >
-> `docker volume rm project_mysql-data project_mysql-test-data`
+> `docker volume rm my-project_mysql-data my-project_mysql-test-data`
 >
 > If you don't, db initialization will be skipped, and it will still be running with the old parameters.
 
