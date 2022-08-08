@@ -142,9 +142,9 @@ Both applications AND tests are covered with static analysis.
 ### Testing
 
 `phpunit.xml` - normal config for local and CI tests
-* generate an APP_KEY
-* set DB_DATABASE and DB_HOST for mysql-test config in docker-compose.yml
-* add a "do-not-use" for every single .env value that enables communication with an external service
+* We pre-generate an APP_KEY
+* We set DB_DATABASE and DB_HOST for mysql-test config in docker-compose.yml
+* Review your `.env` and add a "do-not-use" for every single value that enables communication with an external service
 
 `phpunit-external.xml` - meant to be run separately against real external services
 * Comment out the normal external service overrides from `phpunit.xml`
