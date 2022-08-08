@@ -78,7 +78,7 @@
             "phpcs -s"
         ],
         "larastan": [
-            "phpstan analyse"
+            "@php vendor/bin/phpstan analyse"
         ]
     },
     "extra": {
