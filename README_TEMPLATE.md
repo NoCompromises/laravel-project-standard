@@ -4,8 +4,6 @@
 
 A brief description about what this project is and how it is used.
 
-Include a link to the laravel-project-standard repo and what version this project is based on.
-
 ## Integrations
 
 For each service you integrate with (for example, Stripe) create a section here.
@@ -255,3 +253,7 @@ here in precise detail: what is the process, when would you need to do it, what 
 
 If there are any relevant bits of architectural history, include them here. For example, is this a major rewrite of some
 previous codebase? Mention it here. Include anything that you would want to know if you were inheriting the project.
+
+## Laravel Project Standard
+
+If you'd like, include a link to the laravel-project-standard repo and what version this project is based on.
