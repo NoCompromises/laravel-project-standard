@@ -113,7 +113,9 @@ Within the `scripts` section of `composer.json`, we make the following changes:
 * Add `phpcbf` for automatically fixing code standard violations - only used locally, mainly when adding a new rule
 * Add `larastan` for static analysis
 
-The `config` block has code sniffer plugins pre-allowed.
+The `config` block has the code sniffer plugin pre-allowed. This plugin makes it zero-configuration to install the slevomat
+ruleset. Without this, we'd need to tweak phpcs.xml, symlink folders, and do more work in CI. As of Composer 2.2, you have
+to explicitly allow permission for plugin installation. This config block pre-approves this one expected plugin.
 
 Anytime you add a private package, make sure to add a sanitized config to `auth.example.json`
 
