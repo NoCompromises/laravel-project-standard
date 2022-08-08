@@ -1,11 +1,11 @@
 {
-    "name": "nocompromises/laravel-project-standard",
+    "name": "nocompromises/my-project",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "My Project",
     "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "license": "NO-LICENSE",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "bugsnag/bugsnag-laravel": "^2.24",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
@@ -78,7 +78,7 @@
             "phpcs -s"
         ],
         "larastan": [
-            "@php vendor/bin/phpstan analyse"
+            "phpstan analyse"
         ]
     },
     "extra": {
