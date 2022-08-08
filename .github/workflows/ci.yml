@@ -25,9 +25,6 @@ jobs:
       - name: Build Docker containers and start them
         run: docker-compose -f docker-compose.yml up -d
 
-      - name: Check running containers
-        run: docker ps -a
-
       - name: Cache composer dependencies
         uses: actions/cache@v1
         with:
