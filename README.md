@@ -148,7 +148,8 @@ Both applications AND tests are covered with static analysis.
 * Comment out the normal external service overrides from `phpunit.xml`
 * Make sure your local .env has the correct values for running external tests
 
-Copy and overwrite the whole `tests` folder to get the right bootstrapping, test types and base classes.
+In many cases, you can just copy the whole `tests` folder into your project, but it would be a good idea to do a diff of the changes,
+just to make sure something wasn't changed in a newer version of Laravel, or any other desired settings in an existing project aren't reverted.
 
 ### Continuous Integration
 
