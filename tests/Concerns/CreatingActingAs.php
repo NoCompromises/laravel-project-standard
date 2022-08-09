@@ -10,16 +10,12 @@ namespace Tests\Concerns;
 
 use App\Models\User;
 
-/**
- * Trait CreatingActingAs
- * @package Tests\Concerns
- */
 trait CreatingActingAs
 {
     /**
      * @var User Current acting as user
      */
-    protected $actingAs;
+    protected User $actingAs;
 
     /**
      * Create an acting as user, save it, and return it

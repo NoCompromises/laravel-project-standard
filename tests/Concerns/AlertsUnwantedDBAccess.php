@@ -11,10 +11,6 @@ namespace Tests\Concerns;
 use Illuminate\Support\Facades\DB;
 use Tests\Exceptions\DatabaseAccessException;
 
-/**
- * Trait AlertsUnwantedDBAccess
- * @package Tests\Concerns
- */
 trait AlertsUnwantedDBAccess
 {
     /**
