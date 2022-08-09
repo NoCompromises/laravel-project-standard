@@ -53,7 +53,6 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-      - ./storage/app/public:/app/public/storage
     ports:
       - "${DOCKER_NGINX_LOCAL_PORT}:443"
     depends_on:
@@ -69,8 +68,6 @@ services:
       - .:/app
     depends_on:
       - mysql
-    environment:
-      PHP_IDE_CONFIG: "serverName=${DOCKER_SERVER_NAME}"
     restart: unless-stopped
 
   ## The PHP-FPM that's used for unit tests and could possibly be used for production instances
