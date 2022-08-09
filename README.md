@@ -25,6 +25,11 @@ If you want to use this project standard, here is a list of files you need to co
 * `phpcs.xml`
 * `phpstan.neon`
 * `phpunit.xml` and `phpunit-external.xml`
+* `resources/js/app.js`
+
+You can also remove:
+
+* `resource/js/bootstrap.js`
 
 Modifications are needed to the following files already in a default Laravel install:
 
@@ -128,6 +133,8 @@ Anytime you add a private package, make sure to add a sanitized config to `auth.
 New Laravel installs default to Vite, but we're still using Webpack on our projects.
 
 Follow the Docker instructions in the README to make sure all npm commands are run through Docker containers.
+
+Instead of using a separate bootstrap file, we load any necessary code directly in `app.js`
 
 ### Code Standards
 
