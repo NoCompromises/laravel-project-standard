@@ -121,7 +121,7 @@ Within the `scripts` section of `composer.json`, we make the following changes:
 * Add `larastan` for static analysis
 
 Some scripts use a short command, like `phpcs`, but others use the `@php` alias, like `larastan`. The difference is subtle,
-but using @php tells composer to use the same php process composer itself is already using. This is especially important
+but using `@php` tells composer to use the same php process composer itself is already using. This is especially important
 if you want composer's memory limit config to apply.
 
 The `config` block has the code sniffer plugin pre-allowed. This plugin makes it zero-configuration to install the slevomat
