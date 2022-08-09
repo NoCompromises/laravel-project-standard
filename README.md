@@ -46,7 +46,7 @@ Update your Composer packages and scripts:
   * `@php artisan ide-helper:generate`
   * `@php artisan ide-helper:meta`
 * Copy additional sections from `scripts`:
-    * `test` and `test-coverage`
+    * `test`, `test-coverage`, and `test-external`
     * `ide-helper-update`
     * `phpcs` and `phpcbf`
     * `larastan`
@@ -114,7 +114,7 @@ Remove unused packages: `docker/bin/composer remove --dev laravel/pint laravel/s
 
 Within the `scripts` section of `composer.json`, we make the following changes:
 * Add `ide-helper` generation to the `post-update-cmd`
-* Add `test` and `test-coverage` scripts
+* Add `test`, `test-coverage`, and `test-external` scripts
 * Add a dedicated `ide-helper-update` script to regenerate everything for that package
 * Add `phpcs` for detecting code standard violation
 * Add `phpcbf` for automatically fixing code standard violations - only used locally, mainly when adding a new rule
