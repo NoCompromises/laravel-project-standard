@@ -110,6 +110,8 @@ Dev dependencies
 
 We also move the `laravel/tinker` package into the dev requirements, so it's not installed in production.
 
+Remove unused packages: `docker/bin/composer remove --dev laravel/pint laravel/sail`
+
 Within the `scripts` section of `composer.json`, we make the following changes:
 * Add `ide-helper` generation to the `post-update-cmd`
 * Add `test` and `test-coverage` scripts
