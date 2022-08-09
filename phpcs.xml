@@ -6,6 +6,7 @@
     <file>config</file>
     <file>database/factories</file>
     <file>database/seeders</file>
+    <file>lang</file>
     <file>tests</file>
 
     <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
