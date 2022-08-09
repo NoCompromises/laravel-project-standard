@@ -62,6 +62,9 @@
         "test-coverage": [
             "XDEBUG_MODE=coverage phpunit --colors=always --coverage-html=tests/html-coverage"
         ],
+        "test-external": [
+            "phpunit --colors=always --configuration=phpunit-external.xml"
+        ],
         "ide-helper-update": [
             "@php artisan clear-compiled",
             "@php artisan ide-helper:generate",
