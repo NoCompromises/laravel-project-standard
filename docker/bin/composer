@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source "`dirname $0`/../../.env"
+
+# we pass extra flags to composer so it does not run out of memory or bump into permissions issues
+docker exec -it "$COMPOSE_PROJECT_NAME"-php-fpm /usr/bin/env sh -c "COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1 composer $*"

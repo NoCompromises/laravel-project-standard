@@ -1,0 +1,93 @@
+########################################################################################################################
+## Docker Compose file for Local and CI
+##
+## This creates a local development environment.  It can also be used for your CI work.
+##
+## Important things to note:
+## - PHP-FPM has a debug version with xdebug loaded.  This is useful for regular development (so you can use xdebug)
+##   and for code coverage. This is slower though, so we don't use the debug container for normal test runs.
+## - The `alpine` variants of each container are preferred because of their smaller size.
+## - All containers use the `COMPOSE_PROJECT_NAME` environment variable as a prefix. We set an explicit name to avoid
+##   Docker adding a numeric suffix like `-1`. Local dev will never have multiple instances of a container, so setting
+##   an explicit name makes the `docker/bin` scripts more straightforward. Volumes and networks will also be pre-fixed
+##   automatically.
+## - Make sure to enable the performance optimization for Macs, if you're running on macOS 12.2 or higher.
+##   From Docker Desktop, go to Settings, Experimental Features and enable both settings for virtualization and VirtioFS.
+########################################################################################################################
+version: "3.7"
+
+services:
+
+  ## The App database
+  mysql:
+    container_name: "${COMPOSE_PROJECT_NAME}-mysql"
+    image: mysql/mysql-server:8.0.29
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=app # update .env and .env.example if you change any of these values
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
+    ports:
+      - "${DOCKER_MYSQL_LOCAL_PORT}:3306"
+    restart: unless-stopped
+
+  ## MySQL just for Unit Tests
+  mysql-test:
+    container_name: "${COMPOSE_PROJECT_NAME}-mysql-test"
+    image: mysql/mysql-server:8.0.29
+    volumes:
+      - mysql-test-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=apptest # update phpunit.xml if you change any of these values
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
+    restart: unless-stopped
+
+  ## NGINX to support the app, configured to use the php-fpm-debug server
+  nginx:
+    container_name: "${COMPOSE_PROJECT_NAME}-nginx"
+    build: docker/nginx
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "${DOCKER_NGINX_LOCAL_PORT}:443"
+    depends_on:
+      - php-fpm-debug
+    restart: unless-stopped
+
+  ## The PHP-FPM that's used for the app development, also useful for code coverage
+  php-fpm-debug:
+    container_name: "${COMPOSE_PROJECT_NAME}-php-fpm-debug"
+    build: docker/php-fpm
+    working_dir: /app
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  ## The PHP-FPM that's used for unit tests and could possibly be used for production instances
+  php-fpm:
+    container_name: "${COMPOSE_PROJECT_NAME}-php-fpm"
+    build:
+      context: docker/php-fpm
+      target: base
+    working_dir: /app
+    volumes:
+      - .:/app
+    depends_on:
+      - mysql
+    environment:
+      PHP_IDE_CONFIG: "serverName=${DOCKER_SERVER_NAME}"
+    restart: unless-stopped
+
+networks:
+  default:
+
+volumes:
+  mysql-data:
+  mysql-test-data:

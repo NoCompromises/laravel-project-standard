@@ -1,0 +1,8 @@
+{
+    "http-basic": {
+        "domain-name.com": {
+            "username": "",
+            "password": ""
+        }
+    }
+}
