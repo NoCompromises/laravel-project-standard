@@ -83,7 +83,7 @@ You can verify that your containers are in a running state with `docker compose 
 The one tool that we don't manage through Docker Compose is `node`/`npm`. The reason is that node only needs to run on demand,
 and not be constantly run in the background while we're doing development.
 
-To build the `node`/`npm` container, run: `docker build -t my-project-node docker/node`
+Before you can run any npm commands, you need to build the `node`/`npm` container: `docker build -t my-project-node docker/node`
 
 **Composer licensing**
 
