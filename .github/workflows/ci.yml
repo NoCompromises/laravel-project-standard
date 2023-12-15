@@ -4,29 +4,39 @@ on: push
 
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     env:
       PROJECT_NAME: my-project
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
 
       - name: Setup default environment
         run: cp .env.example .env
 
-      - name: Install mkcert
-        run: sudo apt install libnss3-tools && brew install mkcert && mkcert -install
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Generate test certificate
-        run: mkcert -cert-file "docker/nginx/ssl.pem" -key-file "docker/nginx/key.pem" "$PROJECT_NAME.test"
+      - name: Build Docker images
+        uses: docker/bake-action@v3
+        with:
+          load: true
+          files: |
+            docker-compose.yml
+          targets: |
+            php-fpm
+          set: |
+            *.cache-from=type=gha,scope=${{github.ref}}
+            *.cache-from=type=gha,scope=refs/heads/main
+            *.cache-to=type=gha,scope=${{github.ref}},mode=max
 
       - name: Build Docker containers and start them
-        run: docker-compose -f docker-compose.yml up -d
+        run: docker compose up -d mysql mysql-test php-fpm --wait --no-build
 
       - name: Cache composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: vendor
           key: composer-${{ hashFiles('composer.lock') }}
@@ -44,17 +54,16 @@ jobs:
           docker inspect "$PROJECT_NAME-mysql"
 
       - name: Cache npm dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: npm-${{ hashFiles('package-lock.json') }}
 
-      - name: Install JS dependencies
-        run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm ci && npm run prod
+      - name: Build node image
+        run: docker build -t "$PROJECT_NAME-node" docker/node
 
-# enable this on the project after adding your first test
-#      - name: Run JS test suite
-#        run: docker run --rm -e "TERM=xterm-256color" -v $(pwd):/usr/src/app -w /usr/src/app node:16-alpine npm test
+      - name: Install JS dependencies
+        run: docker/bin/npm-ci ci && docker/bin/npm-ci run build
 
       - name: Cache routes
         run: docker exec "$PROJECT_NAME-php-fpm" ./artisan route:cache
@@ -62,22 +71,25 @@ jobs:
       - name: Cache views
         run: docker exec "$PROJECT_NAME-php-fpm" ./artisan view:cache
 
-      - name: Run PHPCS
-        run: docker exec "$PROJECT_NAME-php-fpm" composer phpcs
+      - name: Cache Larastan result cache
+        uses: actions/cache@v3
+        with:
+          path: .phpstan.cache
+          key: "phpstan-result-cache-${{ github.run_id }}" # always unique key - always writes a new cache
+          restore-keys: | # prefix allows it to use previous cache as starting point
+            phpstan-result-cache-
 
-      - name: Run Larastan
-        run: docker exec "$PROJECT_NAME-php-fpm" /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer larastan"
+      - name: Run CI tools
+        run: docker exec "$PROJECT_NAME-php-fpm" /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer ci"
 
-      - name: Run PHP test suite
-        run: docker exec "$PROJECT_NAME-php-fpm" composer test
+      - name: Check logs if you need to debug a failing test
+        if: ${{ failure() }}
+        run: docker exec "$PROJECT_NAME-php-fpm" cat storage/logs/laravel.log
 
-#      - name: Check logs if you need to debug a failing test
-#        run: docker exec "$PROJECT_NAME-php-fpm" cat storage/logs/laravel.log
+      - name: Deploy to staging if develop branch
+        if: github.ref == 'refs/heads/develop'
+        run: curl -s ${{ secrets.ENVOYER_STAGING_TRIGGER }}
 
-#      - name: Deploy to staging if develop branch
-#        if: github.ref == 'refs/heads/develop'
-#        run: curl -s ${{ secrets.ENVOYER_STAGING_TRIGGER }}
-
-#      - name: Deploy to prod if master branch
-#        if: github.ref == 'refs/heads/master'
-#        run: curl -s ${{ secrets.ENVOYER_PROD_TRIGGER }}
+      - name: Deploy to prod if main branch
+        if: github.ref == 'refs/heads/main'
+        run: curl -s ${{ secrets.ENVOYER_PROD_TRIGGER }}

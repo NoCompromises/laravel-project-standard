@@ -4,8 +4,7 @@
 
     <file>app</file>
     <file>config</file>
-    <file>database/factories</file>
-    <file>database/seeders</file>
+    <file>database</file>
     <file>lang</file>
     <file>routes</file>
     <file>tests</file>
@@ -38,12 +37,27 @@
         <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline"/>
     </rule>
 
+    <rule ref="Squiz.WhiteSpace.FunctionSpacing">
+        <properties>
+            <property name="spacing" value="1" />
+            <property name="spacingBeforeFirst" value="0" />
+            <property name="spacingAfterLast" value="0" />
+        </properties>
+    </rule>
 
     <config name="installed_paths" value="../../slevomat/coding-standard"/>
+
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
-            <property name="newlinesCountBetweenOpenTagAndDeclare" value="2" />
+            <property name="linesCountBeforeDeclare" value="1" />
+            <property name="linesCountAfterDeclare" value="1" />
             <property name="spacesCountAroundEqualsSign" value="0" />
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true" />
         </properties>
     </rule>
 

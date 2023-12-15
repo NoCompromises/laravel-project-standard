@@ -1,4 +1,4 @@
-FROM node:16.16.0-alpine3.16
+FROM --platform=linux/amd64 node:16.18.0-alpine3.16
 
 # starting with node 16 the default work directory changed to someplace with existing files, we set it to a clean folder
 WORKDIR /usr/app

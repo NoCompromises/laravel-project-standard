@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source "`dirname $0`/../../.env"
+
+# this docker script is different because the node container only runs as we need it
+docker run --rm -e npm_config_cache=/tmp -v $(pwd):/usr/src/app -w /usr/src/app "$COMPOSE_PROJECT_NAME"-node npm "$@"

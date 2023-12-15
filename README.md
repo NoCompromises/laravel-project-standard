@@ -39,8 +39,8 @@ Modifications are needed to the following files already in a default Laravel ins
 
 Update your Composer packages and scripts:
 
-* Install non-dev packages: `docker/bin/composer require bugsnag/bugsnag-laravel roave/security-advisories spatie/laravel-permission owen-it/laravel-auditing`
-* Install dev packages: `docker/bin/composer require --dev barryvdh/laravel-ide-helper doctrine/dbal laravel/telescope nunomaduro/larastan slevomat/coding-standard squizlabs/php_codesniffer`
+* Install non-dev packages: `docker/bin/composer require roave/security-advisories sentry/sentry-laravel spatie/laravel-permission owen-it/laravel-auditing`
+* Install dev packages: `docker/bin/composer require --dev barryvdh/laravel-ide-helper doctrine/dbal larastan/larastan laravel/telescope phpstan/phpstan-mockery slevomat/coding-standard squizlabs/php_codesniffer`
 * Move tinker to dev: `docker/bin/composer require --dev laravel/tinker` (answer YES if you are asked if you want to move)
 * Add the following commands to the `post-update-cmd` script:
   * `@php artisan ide-helper:generate`
@@ -50,6 +50,7 @@ Update your Composer packages and scripts:
     * `ide-helper-update`
     * `phpcs` and `phpcbf`
     * `larastan`
+    * `ci` and `laravel-cache`
 
 Normalize your test setup:
 
@@ -86,7 +87,7 @@ We use two long-running branches for development: `develop` and `main`.
 * `main` corresponds to production
 
 New work is done in feature branches based off `develop`. When work is completed, it is merged to `develop` and verified
-in the staging environment. Once it's ready to go live in production, it is merged to `master`.
+in the staging environment. Once it's ready to go live in production, it is merged to `main`.
 
 ### Composer
 
@@ -95,16 +96,17 @@ Update the `name` property in `composer.json`.
 Packages we use in every project:
 
 Non-dev dependencies
-* `bugsnag/bugsnag-laravel`
 * `roave/security-advisories`
+* `sentry/sentry-laravel`
 * `spatie/laravel-permission`
 * `owen-it/laravel-auditing`
 
 Dev dependencies
 * `barryvdh/laravel-ide-helper`
 * `doctrine/dbal`
+* `larastan/larastan`
 * `laravel/telescope`
-* `nunomaduro/larastan`
+* `phpstan/phpstan-mockery`
 * `slevomat/coding-standard`
 * `squizlabs/php_codesniffer`
 
@@ -119,6 +121,7 @@ Within the `scripts` section of `composer.json`, we make the following changes:
 * Add `phpcs` for detecting code standard violation
 * Add `phpcbf` for automatically fixing code standard violations - only used locally, mainly when adding a new rule
 * Add `larastan` for static analysis
+* Add `ci` and `laravel-cache` for CI
 
 Some scripts use a short command, like `phpcs`, but others use the `@php` alias, like `larastan`. The difference is subtle,
 but using `@php` tells composer to use the same php process composer itself is already using. This is especially important
@@ -132,7 +135,7 @@ Anytime you add a private package, make sure to add a sanitized config to `auth.
 
 ### Front end
 
-New Laravel installs default to Vite, but we're still using Webpack on our projects.
+New Laravel installs default to Vite.
 
 Follow the Docker instructions in the README to make sure all npm commands are run through Docker containers.
 
@@ -173,5 +176,5 @@ Copy the `.github` folder. Update the `PROJECT_NAME` env variable right at the t
 ### Production
 
 * Forge for server provisioning, generally on AWS
-* Envoyer for deployment, triggered from Github CI on success for `develop` and `main`
-* ChecklyHQ for uptime monitoring
+* Envoyer for deployment, triggered from GitHub CI on success for `develop` and `main`
+* Sentry for exception reporting and APM

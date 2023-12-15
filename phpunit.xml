@@ -2,9 +2,10 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
-         cacheResult="false"
          colors="true"
-         stopOnFailure="true">
+         stopOnFailure="true"
+         cacheDirectory=".phpunit.cache"
+>
     <testsuites>
         <testsuite name="Unit">
             <directory>./tests/Unit</directory>
@@ -16,11 +17,7 @@
             <directory>./tests/Feature</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">./app</directory>
-        </include>
-    </coverage>
+    <coverage/>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_KEY" value="base64:tnGs4PMYS37KL+9JZrbI8O4E4ejefPOKw8Z1qFKmH3U="/>
@@ -29,8 +26,14 @@
         <env name="DB_DATABASE" value="apptest"/>
         <env name="DB_HOST" value="mysql-test"/>
         <env name="MAIL_MAILER" value="array"/>
-        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="QUEUE_CONNECTION" value="null"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <ini name="memory_limit" value="256M"/>
     </php>
+    <source>
+        <include>
+            <directory>./app</directory>
+        </include>
+    </source>
 </phpunit>

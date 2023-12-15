@@ -80,10 +80,10 @@ may take a few minutes to pull down images and build the containers. Subsequent 
 
 You can verify that your containers are in a running state with `docker compose ps`.
 
-The one tool that we don't manage through Docker Compose is `node`/`npm`. The reason is that node only needs to run on demand,
+The one tool that we don't manage through Docker Compose is `node`/`npm`. The reason is that `node` only needs to run on demand,
 and not be constantly run in the background while we're doing development.
 
-Before you can run any npm commands, you need to build the `node`/`npm` container: `docker build -t my-project-node docker/node`
+To build the `node`/`npm` container, run: `docker build -t my-project-node docker/node`
 
 **Composer licensing**
 
@@ -111,6 +111,7 @@ Run these commands to finish the local development setup
 * `docker/bin/composer install`
 * `docker/bin/composer run post-root-package-install`
 * `docker/bin/composer run post-create-project-cmd`
+* `docker/bin/artisan horizon:install`
 * `docker/bin/artisan migrate --seed`
 
 You're good to go - surf to https://my-project.test:30080  (or a different host/port if you've configured it)
@@ -135,6 +136,16 @@ Then, when you're done for the day, you can stop the Docker environment:
 > There is also a `down` command, and it might seem more logical as the opposite action of `up`. This command not only stops
 > the containers, but removes them along with the Docker network. This doesn't harm anything, and no data will be lost if you
 > run `down` instead, but there's no need to constantly remove and recreate the containers, so `stop` is a better choice.
+
+## Running Horizon
+
+The `.env.example` file sets up queues to run with the `redis` configuration, and we use Horizon to manage the queue workers.
+
+By default `docker compose up` will start a Horizon worker in a separate container. If, for some reason you want to stop
+Horizon, you can stop that container with `docker compose stop horizon`.
+
+> Be aware, if you're changing code and also interacting with the queues, you will need to restart horizon in order to
+> have the new code loaded: `docker compose restart horizon`
 
 ## Docker upgrades
 
@@ -199,11 +210,6 @@ If you want to update Composer, change the version of composer in the first `COP
 
 You can also modify any `.ini` files or add entirely new ones by creating the file and adding a corresponding `COPY` command.
 
-> If you upgrade the PHP version to a new major/minor, you will likely also need to update the `zend_extension` path in the
-> xdebug ini file. In my experience, the easiest way to figure it out is to build the containers then run a terminal in
-> the new debug container and `ls /usr/local/lib/php/extensions` to see what the new build number is. You can then make
-> the change in the ini file and rebuild one more time.
-
 For all types of change, you'll need to rebuild the images:
 
 1. Bring down the current containers: `docker compose stop php-fpm php-fpm-debug`
@@ -223,7 +229,7 @@ To update npm, change the first RUN line to reference the correct version.
 
 For either change, you'll need to rebuild the images: (we don't have to stop or remove since node isn't running all the time)
 
-1. Rebuild the containers: `docker compose build --no-cache node` (Bypassing the cache isn't always necessary, but it's a safe default)
+1. Rebuild the containers: `docker build --no-cache -t my-project-node docker/node` (Bypassing the cache isn't always necessary, but it's a safe default)
 
 To verify the correct version is now running, you can run `docker/bin/npm -v`.
 

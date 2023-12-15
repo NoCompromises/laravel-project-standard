@@ -6,7 +6,8 @@
 /vendor
 .env
 .env.backup
-.phpunit.result.cache
+.phpstan.cache
+.phpunit.cache
 auth.json
 npm-debug.log
 /.idea

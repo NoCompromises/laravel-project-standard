@@ -1,17 +1,17 @@
 {
     "name": "nocompromises/my-project",
     "type": "project",
-    "description": "My Project",
-    "keywords": ["framework", "laravel"],
     "license": "NO-LICENSE",
     "require": {
-        "php": "^8.1",
-        "bugsnag/bugsnag-laravel": "^2.24",
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-redis": "^6.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^2.14.1",
+        "laravel/framework": "^10.10",
+        "laravel/horizon": "^5.21",
+        "laravel/sanctum": "^3.3",
         "owen-it/laravel-auditing": "^13.0",
-        "roave/security-advisories": "dev-latest",
+        "sentry/sentry-laravel": "^4.1",
         "spatie/laravel-permission": "^5.5"
     },
     "require-dev": {
@@ -19,13 +19,14 @@
         "doctrine/dbal": "^3.4",
         "fakerphp/faker": "^1.9.1",
         "laravel/telescope": "^4.9",
-        "laravel/tinker": "^2.7",
+        "laravel/tinker": "^2.8",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "nunomaduro/larastan": "^2.1",
+        "nunomaduro/collision": "^7.0",
+        "larastan/larastan": "^2.1",
+        "phpstan/phpstan-mockery": "^1.1",
         "phpunit/phpunit": "^9.5.10",
+        "roave/security-advisories": "dev-latest",
         "slevomat/coding-standard": "^8.3",
-        "spatie/laravel-ignition": "^1.0",
         "squizlabs/php_codesniffer": "^3.7"
     },
     "autoload": {
@@ -69,7 +70,7 @@
             "@php artisan clear-compiled",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:meta",
-            "@php artisan ide-helper:models --write"
+            "@php artisan ide-helper:models --write --reset"
         ],
         "phpcbf": [
             "phpcbf"
@@ -79,6 +80,16 @@
         ],
         "larastan": [
             "@php vendor/bin/phpstan analyse"
+        ],
+        "ci": [
+            "@composer phpcs",
+            "@composer larastan",
+            "@composer test"
+        ],
+        "laravel-cache": [
+            "@php artisan config:cache",
+            "@php artisan view:cache",
+            "@php artisan route:cache"
         ]
     },
     "extra": {
@@ -96,6 +107,17 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts-descriptions": {
+        "test": "Runs all of the unit tests",
+        "test-coverage": "Runs all unit tests with XDebug code coverage, outputs to tests/html-coverage",
+        "test-external": "Runs the external test suite (tests that hit real APIs)",
+        "ide-helper-update": "Updates the IDE helper files",
+        "phpcbf": "Runs PHP_CodeSniffer's code beautifier",
+        "phpcs": "Runs PHP_CodeSniffer",
+        "larastan": "Runs the Larastan (PHPStan)",
+        "ci": "Runs tasks that should be done for integration: code sniffing, static analysis, and tests",
+        "laravel-cache": "Runs Laravel caching commands (for CI and prod)"
+    }
 }
