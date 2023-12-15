@@ -58,6 +58,9 @@ Then, generate the certificates for this project and put them into a location ac
 
 `mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.test`
 
+### Node environment
+The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh). Volta will read the pinned versions of Node and npm from the `package.json` so you can be sure you're using the correct versions.
+
 ### Get the project running in Docker
 
 Docker is used for local development. It's self-contained, easy to set up, and matches the exact versions of key services
@@ -80,11 +83,6 @@ may take a few minutes to pull down images and build the containers. Subsequent 
 
 You can verify that your containers are in a running state with `docker compose ps`.
 
-The one tool that we don't manage through Docker Compose is `node`/`npm`. The reason is that `node` only needs to run on demand,
-and not be constantly run in the background while we're doing development.
-
-To build the `node`/`npm` container, run: `docker build -t my-project-node docker/node`
-
 **Composer licensing**
 
 > If this project uses a paid Composer package, like Nova, document it here
@@ -106,8 +104,8 @@ about versions of tooling will no longer apply.
 To make it easier to run tools via Docker, a collection of simple shell scripts exists in the project's `docker/bin` directory.
 
 Run these commands to finish the local development setup
-* `docker/bin/npm install`
-* `docker/bin/npm run dev`
+* `npm install`
+* `npm run dev`
 * `docker/bin/composer install`
 * `docker/bin/composer run post-root-package-install`
 * `docker/bin/composer run post-create-project-cmd`
@@ -222,16 +220,11 @@ container and run `php -v` from the terminal that launches.
 
 ### Node/npm
 
-If you want to change the version of Node edit the first line in `docker/node/Dockerfile` to reflect the desired version
-number. Make sure to pick the alpine version of any image.
+If you want to change the version of `node`, run `volta pin node@XYZ` where `XYZ` is the desired version. The same works for `npm` with `volta pin npm@XYZ`
 
-To update npm, change the first RUN line to reference the correct version.
+This will update the corresponding sections of the `volta` object in `package.json`.
 
-For either change, you'll need to rebuild the images: (we don't have to stop or remove since node isn't running all the time)
-
-1. Rebuild the containers: `docker build --no-cache -t my-project-node docker/node` (Bypassing the cache isn't always necessary, but it's a safe default)
-
-To verify the correct version is now running, you can run `docker/bin/npm -v`.
+To verify the correct version is now running, you can run `node -v` or `npm -v`.
 
 ## Deployment / CI Process
 

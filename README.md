@@ -132,7 +132,7 @@ Anytime you add a private package, make sure to add a sanitized config to `auth.
 
 New Laravel installs default to Vite.
 
-Follow the Docker instructions in the README to make sure all npm commands are run through Docker containers.
+Follow the instructions in the README to setup Volta to make sure all node/npm commands are run with the correct version.
 
 Instead of using a separate bootstrap file, we load any necessary code directly in `app.js`
 

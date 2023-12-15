@@ -59,11 +59,11 @@ jobs:
           path: node_modules
           key: npm-${{ hashFiles('package-lock.json') }}
 
-      - name: Build node image
-        run: docker build -t "$PROJECT_NAME-node" docker/node
+      - name: Set up Volta to manage Node/Npm versions
+        uses: volta-cli/action@v4
 
       - name: Install JS dependencies
-        run: docker/bin/npm-ci ci && docker/bin/npm-ci run build
+        run: npm install && npm run build
 
       - name: Cache routes
         run: docker exec "$PROJECT_NAME-php-fpm" ./artisan route:cache
