@@ -23,6 +23,7 @@ trait CreatesActingAs
     {
         $this->actingAs = User::factory()->create($properties);
         $this->actingAs($this->actingAs);
+
         return $this->actingAs;
     }
 }

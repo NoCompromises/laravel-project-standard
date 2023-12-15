@@ -21,8 +21,5 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    public function boot()
-    {
-        //
-    }
+    public function boot() {}
 }

@@ -8,6 +8,6 @@ class ExampleTest extends UnitTestCase
 {
     public function testTrueIsTrue()
     {
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 }

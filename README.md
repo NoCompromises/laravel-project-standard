@@ -22,7 +22,7 @@ If you want to use this project standard, here is a list of files you need to co
 * `docker` folder
 * `.gitgnore`
 * `.github` folder
-* `phpcs.xml`
+* `.php-cs-fixer.php`
 * `phpstan.neon`
 * `phpunit.xml` and `phpunit-external.xml`
 * `resources/js/app.js`
@@ -34,13 +34,13 @@ You can also remove:
 Modifications are needed to the following files already in a default Laravel install:
 
 * `.env.example` and `.env`
-  * copy from `APP_URL`, `COMPOSER_PROJECT_NAME`, `DOCKER_MYSQL_LOCAL_PORT`, `DOCKER_NGINX_LOCAL_PORT`, and  `DOCKER_SERVER_NAME`
+  * copy from `APP_URL`, `COMPOSER_PROJECT_NAME`, `DOCKER_MYSQL_LOCAL_PORT`, `DOCKER_NGINX_LOCAL_PORT`, and `DOCKER_SERVER_NAME`
   * copy `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`
 
 Update your Composer packages and scripts:
 
 * Install non-dev packages: `docker/bin/composer require roave/security-advisories sentry/sentry-laravel spatie/laravel-permission owen-it/laravel-auditing`
-* Install dev packages: `docker/bin/composer require --dev barryvdh/laravel-ide-helper doctrine/dbal larastan/larastan laravel/telescope phpstan/phpstan-mockery slevomat/coding-standard squizlabs/php_codesniffer`
+* Install dev packages: `docker/bin/composer require --dev barryvdh/laravel-ide-helper doctrine/dbal larastan/larastan laravel/telescope nocompromises/php-cs-fixer-config phpstan/phpstan-mockery`
 * Move tinker to dev: `docker/bin/composer require --dev laravel/tinker` (answer YES if you are asked if you want to move)
 * Add the following commands to the `post-update-cmd` script:
   * `@php artisan ide-helper:generate`
@@ -48,7 +48,7 @@ Update your Composer packages and scripts:
 * Copy additional sections from `scripts`:
     * `test`, `test-coverage`, and `test-external`
     * `ide-helper-update`
-    * `phpcs` and `phpcbf`
+    * `phpcs` and `phpcs-fix`
     * `larastan`
     * `ci` and `laravel-cache`
 
@@ -106,9 +106,8 @@ Dev dependencies
 * `doctrine/dbal`
 * `larastan/larastan`
 * `laravel/telescope`
+* `nocompromises/php-cs-fixer-config`
 * `phpstan/phpstan-mockery`
-* `slevomat/coding-standard`
-* `squizlabs/php_codesniffer`
 
 We also move the `laravel/tinker` package into the dev requirements, so it's not installed in production.
 
@@ -119,17 +118,13 @@ Within the `scripts` section of `composer.json`, we make the following changes:
 * Add `test`, `test-coverage`, and `test-external` scripts
 * Add a dedicated `ide-helper-update` script to regenerate everything for that package
 * Add `phpcs` for detecting code standard violation
-* Add `phpcbf` for automatically fixing code standard violations - only used locally, mainly when adding a new rule
+* Add `phpcs-fix` for automatically fixing code standard violations - only used locally, mainly when adding a new rule
 * Add `larastan` for static analysis
 * Add `ci` and `laravel-cache` for CI
 
 Some scripts use a short command, like `phpcs`, but others use the `@php` alias, like `larastan`. The difference is subtle,
 but using `@php` tells composer to use the same php process composer itself is already using. This is especially important
 if you want composer's memory limit config to apply.
-
-The `config` block has the code sniffer plugin pre-allowed. This plugin makes it zero-configuration to install the slevomat
-ruleset. Without this, we'd need to tweak phpcs.xml, symlink folders, and do more work in CI. As of Composer 2.2, you have
-to explicitly allow permission for plugin installation. This config block pre-approves this one expected plugin.
 
 Anytime you add a private package, make sure to add a sanitized config to `auth.example.json`
 
@@ -143,9 +138,9 @@ Instead of using a separate bootstrap file, we load any necessary code directly 
 
 ### Code Standards
 
-Configured with `phpcs.xml`
+Configured with `.php-cs-fixer.php`
 
-PHP Code Sniffer is used, not `php-cs-fixer` or `pint`.
+PHP Coding Standards Fixer is used, not PHP_CodeSniffer or Laravel Pint.
 
 ### Static Analysis
 

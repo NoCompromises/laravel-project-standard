@@ -8,6 +8,7 @@
 .env.backup
 .phpstan.cache
 .phpunit.cache
+.php-cs-fixer.cache
 auth.json
 npm-debug.log
 /.idea

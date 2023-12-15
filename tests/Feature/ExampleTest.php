@@ -8,8 +8,6 @@ class ExampleTest extends FeatureTestCase
 {
     /**
      * A basic test example.
-     *
-     * @return void
      */
     public function testHomeSuccess()
     {

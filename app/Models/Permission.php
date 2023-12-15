@@ -30,6 +30,4 @@ namespace App\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Permission extends \Spatie\Permission\Models\Permission
-{
-}
+class Permission extends \Spatie\Permission\Models\Permission {}

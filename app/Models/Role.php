@@ -27,6 +27,4 @@ namespace App\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Role extends \Spatie\Permission\Models\Role
-{
-}
+class Role extends \Spatie\Permission\Models\Role {}
