@@ -10,20 +10,14 @@ namespace Tests\Concerns;
 
 use App\Models\User;
 
-trait CreatingActingAs
+trait CreatesActingAs
 {
-    /**
-     * @var User Current acting as user
-     */
     protected User $actingAs;
 
     /**
      * Create an acting as user, save it, and return it
      *
-     * Note that this uses the config option but it can be overridden by the other option
-     *
-     * @param array $properties
-     * @return User
+     * Note that this uses the config option, but it can be overridden by the other option
      */
     protected function createActingAs(array $properties = []): User
     {

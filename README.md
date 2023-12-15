@@ -151,7 +151,7 @@ PHP Code Sniffer is used, not `php-cs-fixer` or `pint`.
 
 Configured with `phpstan.neon`
 
-Currently, we run all projects at PHPStan level 1. This will be increased gradually.
+Currently, we run all projects at PHPStan level 5.
 
 Both applications AND tests are covered with static analysis.
 
