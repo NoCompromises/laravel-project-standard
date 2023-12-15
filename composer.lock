@@ -7728,16 +7728,16 @@
         },
         {
             "name": "nocompromises/php-cs-fixer-config",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/NoCompromises/php-cs-fixer-config.git",
-                "reference": "5e6a1eb518eff8a658dd44cd1eca3ed287c5520e"
+                "reference": "bd4a367b7769cfedd154e101261d1941eab07266"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/NoCompromises/php-cs-fixer-config/zipball/5e6a1eb518eff8a658dd44cd1eca3ed287c5520e",
-                "reference": "5e6a1eb518eff8a658dd44cd1eca3ed287c5520e",
+                "url": "https://api.github.com/repos/NoCompromises/php-cs-fixer-config/zipball/bd4a367b7769cfedd154e101261d1941eab07266",
+                "reference": "bd4a367b7769cfedd154e101261d1941eab07266",
                 "shasum": ""
             },
             "require": {
@@ -7763,9 +7763,9 @@
             "description": "The standard PHP CS Fixer config for No Compromises projects",
             "support": {
                 "issues": "https://github.com/NoCompromises/php-cs-fixer-config/issues",
-                "source": "https://github.com/NoCompromises/php-cs-fixer-config/tree/1.0.0"
+                "source": "https://github.com/NoCompromises/php-cs-fixer-config/tree/1.0.1"
             },
-            "time": "2023-12-04T13:42:17+00:00"
+            "time": "2023-12-15T20:36:06+00:00"
         },
         {
             "name": "nunomaduro/collision",
