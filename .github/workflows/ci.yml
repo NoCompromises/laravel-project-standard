@@ -79,6 +79,14 @@ jobs:
           restore-keys: | # prefix allows it to use previous cache as starting point
             phpstan-result-cache-
 
+      - name: Cache php-cs-fixer result cache
+        uses: actions/cache@v3
+        with:
+          path: .php-cs-fixer.cache
+          key: "php-cs-fixer-result-cache-${{ github.run_id }}" # always unique key - always writes a new cache
+          restore-keys: | # prefix allows it to use previous cache as starting point
+            php-cs-fixer-result-cache-
+
       - name: Run CI tools
         run: docker exec "$PROJECT_NAME-php-fpm" /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer ci"
 
