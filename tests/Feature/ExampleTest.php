@@ -6,12 +6,7 @@ namespace Tests\Feature;
 
 class ExampleTest extends FeatureTestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testHomeSuccess()
+    public function testHomeSuccess(): void
     {
         $response = $this->get('/');
 

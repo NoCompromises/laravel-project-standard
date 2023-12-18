@@ -14,80 +14,120 @@
 ## - Make sure to enable the performance optimization for Macs, if you're running on macOS 12.2 or higher.
 ##   From Docker Desktop, go to Settings, Experimental Features and enable both settings for virtualization and VirtioFS.
 ########################################################################################################################
-version: "3.7"
+version: "3.9"
 
 services:
 
-  ## The App database
-  mysql:
-    container_name: "${COMPOSE_PROJECT_NAME}-mysql"
-    image: mysql/mysql-server:8.0.29
-    volumes:
-      - mysql-data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=app # update .env and .env.example if you change any of these values
-      - MYSQL_USER=app
-      - MYSQL_PASSWORD=app
-    ports:
-      - "${DOCKER_MYSQL_LOCAL_PORT}:3306"
-    restart: unless-stopped
+    ## The App database
+    mysql:
+        container_name: "${COMPOSE_PROJECT_NAME}-mysql"
+        image: mysql:8.0.35
+        volumes:
+            - mysql-data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_DATABASE=app # update .env and .env.example if you change any of these values
+            - MYSQL_USER=app
+            - MYSQL_PASSWORD=app
+        ports:
+            - "${DOCKER_MYSQL_LOCAL_PORT}:3306"
+        command:
+            - "--character-set-server=utf8mb4"
+            - "--collation-server=utf8mb4_unicode_ci"
+            - "--default-authentication-plugin=mysql_native_password"
+        restart: unless-stopped
 
-  ## MySQL just for Unit Tests
-  mysql-test:
-    container_name: "${COMPOSE_PROJECT_NAME}-mysql-test"
-    image: mysql/mysql-server:8.0.29
-    volumes:
-      - mysql-test-data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=apptest # update phpunit.xml if you change any of these values
-      - MYSQL_USER=app
-      - MYSQL_PASSWORD=app
-    restart: unless-stopped
+    ## MySQL just for Unit Tests
+    mysql-test:
+        container_name: "${COMPOSE_PROJECT_NAME}-mysql-test"
+        image: mysql:8.0.35
+        volumes:
+            - mysql-test-data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_DATABASE=apptest # update phpunit.xml if you change any of these values
+            - MYSQL_USER=app
+            - MYSQL_PASSWORD=app
+        command:
+            - "--character-set-server=utf8mb4"
+            - "--collation-server=utf8mb4_unicode_ci"
+            - "--default-authentication-plugin=mysql_native_password"
+        restart: unless-stopped
 
-  ## NGINX to support the app, configured to use the php-fpm-debug server
-  nginx:
-    container_name: "${COMPOSE_PROJECT_NAME}-nginx"
-    build: docker/nginx
-    working_dir: /app
-    volumes:
-      - .:/app
-    ports:
-      - "${DOCKER_NGINX_LOCAL_PORT}:443"
-    depends_on:
-      - php-fpm-debug
-    restart: unless-stopped
+    redis:
+        container_name: "${COMPOSE_PROJECT_NAME}-redis"
+        image: redis:7.0.5-alpine3.17
+        ports:
+            - "${DOCKER_REDIS_LOCAL_PORT}:6379"
+        restart: unless-stopped
 
-  ## The PHP-FPM that's used for the app development, also useful for code coverage
-  php-fpm-debug:
-    container_name: "${COMPOSE_PROJECT_NAME}-php-fpm-debug"
-    build: docker/php-fpm
-    working_dir: /app
-    volumes:
-      - .:/app
-    depends_on:
-      - mysql
-    restart: unless-stopped
+    ## NGINX to support the app, configured to use the php-fpm-debug server
+    nginx:
+        container_name: "${COMPOSE_PROJECT_NAME}-nginx"
+        build:
+            context: docker/nginx
+            tags: # required for Docker buildx/bake to tag properly
+                - "${COMPOSE_PROJECT_NAME}-nginx"
+        working_dir: /app
+        volumes:
+            - .:/app
+        ports:
+            - "${DOCKER_NGINX_LOCAL_PORT}:443"
+        depends_on:
+            - php-fpm-debug
+        restart: unless-stopped
 
-  ## The PHP-FPM that's used for unit tests and could possibly be used for production instances
-  php-fpm:
-    container_name: "${COMPOSE_PROJECT_NAME}-php-fpm"
-    build:
-      context: docker/php-fpm
-      target: base
-    working_dir: /app
-    volumes:
-      - .:/app
-    depends_on:
-      - mysql
-    environment:
-      PHP_IDE_CONFIG: "serverName=${DOCKER_SERVER_NAME}"
-    restart: unless-stopped
+    ## The PHP-FPM that's used for the app development, also useful for code coverage
+    php-fpm-debug:
+        container_name: "${COMPOSE_PROJECT_NAME}-php-fpm-debug"
+        build:
+            context: docker/php-fpm
+            tags: # required for Docker buildx/bake to tag properly
+                - "${COMPOSE_PROJECT_NAME}-php-fpm-debug"
+        working_dir: /app
+        volumes:
+            - .:/app
+        depends_on:
+            - mysql
+        environment:
+            PHP_IDE_CONFIG: "serverName=${DOCKER_SERVER_NAME}"
+        restart: unless-stopped
 
-networks:
-  default:
+    ## The PHP-FPM that's used for unit tests and could possibly be used for production instances
+    php-fpm:
+        container_name: "${COMPOSE_PROJECT_NAME}-php-fpm"
+        build:
+            context: docker/php-fpm
+            target: base
+            tags: # required for Docker buildx/bake to tag properly
+                - "${COMPOSE_PROJECT_NAME}-php-fpm"
+        working_dir: /app
+        volumes:
+            - .:/app
+        depends_on:
+            - mysql
+        environment:
+            PHP_IDE_CONFIG: "serverName=${DOCKER_SERVER_NAME}"
+        restart: unless-stopped
+
+    ## The Horizon worker to process queue jobs
+    horizon:
+        container_name: "${COMPOSE_PROJECT_NAME}-horizon"
+        build:
+            context: docker/php-fpm
+            target: base
+        working_dir: /app
+        entrypoint: php artisan horizon
+        volumes:
+            - .:/app
+        depends_on:
+            - mysql
+            - redis
+        restart: unless-stopped
 
 volumes:
-  mysql-data:
-  mysql-test-data:
+    mysql-data:
+    mysql-test-data:
+
+networks:
+    default:

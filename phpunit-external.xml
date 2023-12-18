@@ -20,7 +20,6 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="DB_CONNECTION" value="testing" />
         <env name="TELESCOPE_ENABLED" value="false" />
-        <env name="GEOCODE_CACHE_DRIVER" value="array"/>
         <!-- <env name="EXTERNAL_SERVICE_ENV" value="required in .env file"/> -->
         <ini name="memory_limit" value="256M" />
     </php>

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Cross-Origin Resource Sharing (CORS) Configuration
@@ -32,5 +31,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
-
 ];

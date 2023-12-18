@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This trait adds a listener to the DB connection that let's us know when we've accessed the DB accidentally
+ * This trait adds a listener to the DB connection that lets us know when we've accessed the DB accidentally
  */
 
 declare(strict_types=1);

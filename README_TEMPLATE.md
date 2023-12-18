@@ -58,6 +58,9 @@ Then, generate the certificates for this project and put them into a location ac
 
 `mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.test`
 
+### Node environment
+The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh). Volta will read the pinned versions of Node and npm from the `package.json` so you can be sure you're using the correct versions.
+
 ### Get the project running in Docker
 
 Docker is used for local development. It's self-contained, easy to set up, and matches the exact versions of key services
@@ -80,11 +83,6 @@ may take a few minutes to pull down images and build the containers. Subsequent 
 
 You can verify that your containers are in a running state with `docker compose ps`.
 
-The one tool that we don't manage through Docker Compose is `node`/`npm`. The reason is that node only needs to run on demand,
-and not be constantly run in the background while we're doing development.
-
-Before you can run any npm commands, you need to build the `node`/`npm` container: `docker build -t my-project-node docker/node`
-
 **Composer licensing**
 
 > If this project uses a paid Composer package, like Nova, document it here
@@ -106,11 +104,12 @@ about versions of tooling will no longer apply.
 To make it easier to run tools via Docker, a collection of simple shell scripts exists in the project's `docker/bin` directory.
 
 Run these commands to finish the local development setup
-* `docker/bin/npm install`
-* `docker/bin/npm run dev`
+* `npm install`
+* `npm run dev`
 * `docker/bin/composer install`
 * `docker/bin/composer run post-root-package-install`
 * `docker/bin/composer run post-create-project-cmd`
+* `docker/bin/artisan horizon:install`
 * `docker/bin/artisan migrate --seed`
 
 You're good to go - surf to https://my-project.test:30080  (or a different host/port if you've configured it)
@@ -135,6 +134,16 @@ Then, when you're done for the day, you can stop the Docker environment:
 > There is also a `down` command, and it might seem more logical as the opposite action of `up`. This command not only stops
 > the containers, but removes them along with the Docker network. This doesn't harm anything, and no data will be lost if you
 > run `down` instead, but there's no need to constantly remove and recreate the containers, so `stop` is a better choice.
+
+## Running Horizon
+
+The `.env.example` file sets up queues to run with the `redis` configuration, and we use Horizon to manage the queue workers.
+
+By default `docker compose up` will start a Horizon worker in a separate container. If, for some reason you want to stop
+Horizon, you can stop that container with `docker compose stop horizon`.
+
+> Be aware, if you're changing code and also interacting with the queues, you will need to restart horizon in order to
+> have the new code loaded: `docker compose restart horizon`
 
 ## Docker upgrades
 
@@ -199,11 +208,6 @@ If you want to update Composer, change the version of composer in the first `COP
 
 You can also modify any `.ini` files or add entirely new ones by creating the file and adding a corresponding `COPY` command.
 
-> If you upgrade the PHP version to a new major/minor, you will likely also need to update the `zend_extension` path in the
-> xdebug ini file. In my experience, the easiest way to figure it out is to build the containers then run a terminal in
-> the new debug container and `ls /usr/local/lib/php/extensions` to see what the new build number is. You can then make
-> the change in the ini file and rebuild one more time.
-
 For all types of change, you'll need to rebuild the images:
 
 1. Bring down the current containers: `docker compose stop php-fpm php-fpm-debug`
@@ -216,16 +220,11 @@ container and run `php -v` from the terminal that launches.
 
 ### Node/npm
 
-If you want to change the version of Node edit the first line in `docker/node/Dockerfile` to reflect the desired version
-number. Make sure to pick the alpine version of any image.
+If you want to change the version of `node`, run `volta pin node@XYZ` where `XYZ` is the desired version. The same works for `npm` with `volta pin npm@XYZ`
 
-To update npm, change the first RUN line to reference the correct version.
+This will update the corresponding sections of the `volta` object in `package.json`.
 
-For either change, you'll need to rebuild the images: (we don't have to stop or remove since node isn't running all the time)
-
-1. Rebuild the containers: `docker compose build --no-cache node` (Bypassing the cache isn't always necessary, but it's a safe default)
-
-To verify the correct version is now running, you can run `docker/bin/npm -v`.
+To verify the correct version is now running, you can run `node -v` or `npm -v`.
 
 ## Deployment / CI Process
 

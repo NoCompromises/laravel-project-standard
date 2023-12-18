@@ -1,17 +1,13 @@
 <?php
 
 /**
- * Adds the ability to mention there is a to do
+ * Adds the ability to mention there is a todo
  */
 
 declare(strict_types=1);
 
 namespace Tests\Concerns;
 
-/**
- * Trait HasTodo
- * @package Tests\Concerns
- */
 trait HasTodo
 {
     /**
