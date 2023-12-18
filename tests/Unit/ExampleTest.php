@@ -6,7 +6,7 @@ namespace Tests\Unit;
 
 class ExampleTest extends UnitTestCase
 {
-    public function testTrueIsTrue()
+    public function testTrueIsTrue(): void
     {
         self::assertTrue(true);
     }
