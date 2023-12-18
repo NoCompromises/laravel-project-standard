@@ -96,8 +96,8 @@ jobs:
 
       - name: Deploy to staging if develop branch
         if: github.ref == 'refs/heads/develop'
-        run: curl -s ${{ secrets.ENVOYER_STAGING_TRIGGER }}
+        run: [ -n "${{ secrets.ENVOYER_STAGING_TRIGGER }}" ] && curl -s ${{ secrets.ENVOYER_STAGING_TRIGGER }}
 
       - name: Deploy to prod if main branch
         if: github.ref == 'refs/heads/main'
-        run: curl -s ${{ secrets.ENVOYER_PROD_TRIGGER }}
+        run: [ -n "${{ secrets.ENVOYER_PROD_TRIGGER }}" ] && curl -s ${{ secrets.ENVOYER_PROD_TRIGGER }}
