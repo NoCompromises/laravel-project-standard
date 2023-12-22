@@ -1,32 +1,25 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
-
-const path = require("path");
-const fs = require("fs");
+import { readFileSync } from "fs";
 
 export default defineConfig(({ mode }) => {
   const config = {
     plugins: [
       laravel({
+        refresh: true,
         input: ["resources/css/app.css", "resources/js/app.js"],
       }),
       vue(),
     ],
-    resolve: {
-      alias: {
-        "~public": path.resolve(__dirname, "public"),
-        "@js": path.resolve(__dirname, "resources/js"),
-      },
-    },
+
     test: {
+      globals: true,
       environment: "jsdom",
       coverage: {
         reporter: ["text", "html"],
-        reportsDirectory: path.resolve(
-          __dirname,
-          "resources/js/tests/coverage"
-        ),
+        reportsDirectory: "resources/js/test-coverage",
+        include: ["resources/js"],
       },
     },
   };
@@ -37,8 +30,8 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       host: true,
       https: {
-        key: fs.readFileSync("docker/nginx/key.pem"),
-        cert: fs.readFileSync("docker/nginx/ssl.pem"),
+        key: readFileSync("docker/nginx/key.pem"),
+        cert: readFileSync("docker/nginx/ssl.pem"),
       },
       hmr: {
         host: "project.domain",
