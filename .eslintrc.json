@@ -2,7 +2,8 @@
     "extends": [
         "airbnb-base",
         "plugin:prettier/recommended",
-        "plugin:vue/base"
+        "plugin:vue/base",
+        "plugin:vitest-globals/recommended"
     ],
     "plugins": [
         "prettier",
@@ -20,6 +21,7 @@
         ]
     },
     "env": {
-        "browser": true
+        "browser": true,
+        "vitest-globals/env": true
     }
 }

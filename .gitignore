@@ -7,7 +7,7 @@
 .env
 .env.backup
 .phpstan.cache
-.phpunit.result.cache
+.phpunit.cache
 .php-cs-fixer.cache
 auth.json
 npm-debug.log
@@ -15,3 +15,4 @@ npm-debug.log
 /.vscode
 docker/nginx/*.pem
 tests/html-coverage
+resources/js/test-coverage
