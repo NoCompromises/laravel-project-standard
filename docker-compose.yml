@@ -22,8 +22,7 @@ services:
     image: mysql:8.0.37
     volumes:
       - mysql-data:/var/lib/mysql
-      # Uncomment the next line if you need scripts to run on mysql initialization, like creating multiple databases
-      # - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: app # update .env and .env.example if you change any of these values
@@ -42,8 +41,7 @@ services:
     image: mysql:8.0.37
     volumes:
       - mysql-test-data:/var/lib/mysql
-      # Uncomment the next line if you need scripts to run on mysql initialization, like creating multiple databases
-      # - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: apptest # update phpunit.xml if you change any of these values

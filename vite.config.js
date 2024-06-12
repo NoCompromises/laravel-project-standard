@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
         cert: readFileSync("docker/vite/ssl.pem"),
       },
       hmr: {
-        host: "project.domain",
+        host: "my-project.test",
       },
     };
   }

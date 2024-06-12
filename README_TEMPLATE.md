@@ -59,7 +59,7 @@ Once `mkcert` is installed, we need to generate our local development root certi
 
 Then, generate the certificates for this project and put them into a location accessible to your docker setup:
 
-`mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.local`
+`mkcert -cert-file docker/vite/ssl.pem -key-file docker/vite/key.pem my-project.test`
 
 ### Node environment
 The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh).
