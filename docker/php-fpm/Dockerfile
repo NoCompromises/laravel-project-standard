@@ -1,4 +1,4 @@
-FROM php:8.2.12-fpm-alpine3.18 as base
+FROM php:8.3.8-fpm-alpine3.20 as base
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     freetype-dev \
@@ -17,7 +17,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 RUN pecl install redis-6.0.2 && docker-php-ext-enable redis
 
 # install composer from the composer image
-COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7.7 /usr/bin/composer /usr/bin/composer
 
 COPY docker-php-file-uploads.ini /usr/local/etc/php/conf.d/docker-php-file-uploads.ini
 
@@ -25,5 +25,5 @@ FROM base as debug
 
 # Supports xdebug
 RUN apk add --update linux-headers
-RUN pecl install xdebug-3.2.2 && docker-php-ext-enable xdebug
+RUN pecl install xdebug-3.3.2 && docker-php-ext-enable xdebug
 COPY docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
