@@ -60,7 +60,7 @@ services:
 
   redis:
     container_name: "${COMPOSE_PROJECT_NAME}-redis"
-    image: redis:7.0.5-alpine3.17
+    image: redis:7.2.5-alpine3.20
     ports:
       - "${DOCKER_REDIS_LOCAL_PORT}:6379"
     restart: unless-stopped
