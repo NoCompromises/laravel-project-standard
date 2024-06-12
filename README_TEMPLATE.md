@@ -97,7 +97,7 @@ And then open `auth.json` and fill out the username and password values.
 **Normal project setup**
 
 With the certificates, our environment, and Docker setup, the rest of these steps will be typical steps for any Laravel
-project. The one key difference is that instead of running tools like npm, composer and artisan directly, we need to run
+project. The one key difference is that instead of running tools like composer and artisan directly, we need to run
 them from inside the container. This is very important. If we run the tools from our host environment, all the guarantees
 about versions of tooling will no longer apply.
 

@@ -65,8 +65,8 @@ jobs:
       - name: Install JS dependencies
         run: npm install && npm run build
 
-      - name: Cache routes
-        run: docker exec "$PROJECT_NAME-php-fpm" ./artisan route:cache
+      - name: Run JS test suite
+        run: LARAVEL_BYPASS_ENV_CHECK=1 npm test
 
       - name: Cache views
         run: docker exec "$PROJECT_NAME-php-fpm" ./artisan view:cache
