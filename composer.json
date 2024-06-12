@@ -1,5 +1,6 @@
 {
     "name": "nocompromises/my-project",
+    "version": "1.0.0",
     "type": "project",
     "license": "proprietary",
     "require": {
