@@ -17,10 +17,10 @@ jobs:
         run: cp .env.example .env
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Build Docker images
-        uses: docker/bake-action@v3
+        uses: docker/bake-action@v4
         with:
           load: true
           files: |
@@ -36,7 +36,7 @@ jobs:
         run: docker compose up -d mysql mysql-test php-fpm --wait --no-build
 
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: composer-${{ hashFiles('composer.lock') }}
@@ -54,7 +54,7 @@ jobs:
           docker inspect "$PROJECT_NAME-mysql"
 
       - name: Cache npm dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: npm-${{ hashFiles('package-lock.json') }}
@@ -65,6 +65,9 @@ jobs:
       - name: Install JS dependencies
         run: npm install && npm run build
 
+      - name: Run JS test suite
+        run: LARAVEL_BYPASS_ENV_CHECK=1 npm test
+
       - name: Cache routes
         run: docker exec "$PROJECT_NAME-php-fpm" ./artisan route:cache
 
@@ -72,7 +75,7 @@ jobs:
         run: docker exec "$PROJECT_NAME-php-fpm" ./artisan view:cache
 
       - name: Cache Larastan result cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .phpstan.cache
           key: "phpstan-result-cache-${{ github.run_id }}" # always unique key - always writes a new cache
@@ -80,7 +83,7 @@ jobs:
             phpstan-result-cache-
 
       - name: Cache php-cs-fixer result cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .php-cs-fixer.cache
           key: "php-cs-fixer-result-cache-${{ github.run_id }}" # always unique key - always writes a new cache

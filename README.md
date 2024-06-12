@@ -34,7 +34,7 @@ You can also remove:
 Modifications are needed to the following files already in a default Laravel install:
 
 * `.env.example` and `.env`
-  * copy from `APP_URL`, `COMPOSER_PROJECT_NAME`, `DOCKER_MYSQL_LOCAL_PORT`, `DOCKER_NGINX_LOCAL_PORT`, and `DOCKER_SERVER_NAME`
+  * copy from `APP_URL`, `COMPOSE_PROJECT_NAME`, and `DOCKER_SERVER_NAME`
   * copy `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`
 
 Update your Composer packages and scripts:

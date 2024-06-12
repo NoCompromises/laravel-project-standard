@@ -4,8 +4,8 @@
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint ./resources/js",
-        "test": "vitest",
-        "test-with-coverage": "vitest run --coverage"
+        "test": "vitest --passWithNoTests",
+        "test-with-coverage": "vitest run --coverage --passWithNoTests"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^4.5.2",

@@ -26,15 +26,13 @@ export default defineConfig(({ mode }) => {
 
   if (mode === "development") {
     config.server = {
-      port: 30098,
-      strictPort: true,
       host: true,
       https: {
-        key: readFileSync("docker/nginx/key.pem"),
-        cert: readFileSync("docker/nginx/ssl.pem"),
+        key: readFileSync("docker/vite/key.pem"),
+        cert: readFileSync("docker/vite/ssl.pem"),
       },
       hmr: {
-        host: "project.domain",
+        host: "my-project.test",
       },
     };
   }

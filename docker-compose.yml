@@ -14,51 +14,49 @@
 ## - Make sure to enable the performance optimization for Macs, if you're running on macOS 12.2 or higher.
 ##   From Docker Desktop, go to Settings, Experimental Features and enable both settings for virtualization and VirtioFS.
 ########################################################################################################################
-version: "3.9"
-
 services:
 
   ## The App database
   mysql:
     container_name: "${COMPOSE_PROJECT_NAME}-mysql"
-    image: mysql:8.0.35
+    image: mysql:8.0.37
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=app # update .env and .env.example if you change any of these values
-      - MYSQL_USER=app
-      - MYSQL_PASSWORD=app
-    ports:
-      - "${DOCKER_MYSQL_LOCAL_PORT}:3306"
-    command:
-      - "--character-set-server=utf8mb4"
-      - "--collation-server=utf8mb4_unicode_ci"
-      - "--default-authentication-plugin=mysql_native_password"
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app # update .env and .env.example if you change any of these values
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    # Uncomment the command section if you need to deviate from MySQL defaults (like on a legacy database schema)
+    # command:
+    #  - "--character-set-server=utf8mb4"
+    #  - "--collation-server=utf8mb4_0900_ai_ci"
+    #  - "--default-authentication-plugin=caching_sha2_password"
     restart: unless-stopped
 
   ## MySQL just for Unit Tests
   mysql-test:
     container_name: "${COMPOSE_PROJECT_NAME}-mysql-test"
-    image: mysql:8.0.35
+    image: mysql:8.0.37
     volumes:
       - mysql-test-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=apptest # update phpunit.xml if you change any of these values
-      - MYSQL_USER=app
-      - MYSQL_PASSWORD=app
-    command:
-      - "--character-set-server=utf8mb4"
-      - "--collation-server=utf8mb4_unicode_ci"
-      - "--default-authentication-plugin=mysql_native_password"
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: apptest # update phpunit.xml if you change any of these values
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    # Uncomment the command section if you need to deviate from MySQL defaults (like on a legacy database schema)
+    # command:
+    #  - "--character-set-server=utf8mb4"
+    #  - "--collation-server=utf8mb4_0900_ai_ci"
+    #  - "--default-authentication-plugin=caching_sha2_password"
     restart: unless-stopped
 
   redis:
     container_name: "${COMPOSE_PROJECT_NAME}-redis"
-    image: redis:7.0.5-alpine3.17
-    ports:
-      - "${DOCKER_REDIS_LOCAL_PORT}:6379"
+    image: redis:7.2.5-alpine3.20
     restart: unless-stopped
 
   ## NGINX to support the app, configured to use the php-fpm-debug server
@@ -71,8 +69,8 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    ports:
-      - "${DOCKER_NGINX_LOCAL_PORT}:443"
+    labels:
+        - "dev.orbstack.domains=${DOCKER_SERVER_NAME}"
     depends_on:
       - php-fpm-debug
     restart: unless-stopped
