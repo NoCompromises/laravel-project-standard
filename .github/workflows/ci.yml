@@ -68,8 +68,11 @@ jobs:
       - name: Run JS test suite
         run: LARAVEL_BYPASS_ENV_CHECK=1 npm test
 
-      - name: Laravel caching
-        run: docker exec "$PROJECT_NAME-php-fpm" composer run laravel-cache
+      - name: Cache routes
+        run: docker exec "$PROJECT_NAME-php-fpm" ./artisan route:cache
+
+      - name: Cache views
+        run: docker exec "$PROJECT_NAME-php-fpm" ./artisan view:cache
 
       - name: Cache Larastan result cache
         uses: actions/cache@v4
