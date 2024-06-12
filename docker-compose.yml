@@ -14,8 +14,6 @@
 ## - Make sure to enable the performance optimization for Macs, if you're running on macOS 12.2 or higher.
 ##   From Docker Desktop, go to Settings, Experimental Features and enable both settings for virtualization and VirtioFS.
 ########################################################################################################################
-version: "3.9"
-
 services:
 
   ## The App database
