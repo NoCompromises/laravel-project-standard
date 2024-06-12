@@ -24,17 +24,17 @@ To get started with local development, follow these steps. Make sure you run all
 
 ### DNS resolution
 
-> Decide on a local domain to use for this project. Substitute that any place you see `my-project.test` or `my-project` below.
+> Decide on a local domain to use for this project. Substitute that any place you see `my-project.local` or `my-project` below.
 
-By default, this project will run on the host `my-project.test`. This requires some sort of local DNS resolution for that hostname
-to your localhost IP address. One easy way to do this for the entire `.test` top-level domain, is to run a lightweight tool
+By default, this project will run on the host `my-project.local`. This requires some sort of local DNS resolution for that hostname
+to your localhost IP address. One easy way to do this for the entire `.local` top-level domain, is to run a lightweight tool
 called `dnsmasq`. You can install it via Homebrew on a Mac with: `brew install dnsmasq`.
 
 > If you've ever setup Valet, it already installed dnsmasq for you. You can verify if it's already installed by running
 > `brew services` and see if `dnsmasq` is listed.
 
 If you don't want to run `dnsmasq`, you can also add a manual DNS entry to your `/etc/hosts` file in the form:
-`127.0.0.1 my-project.test`
+`127.0.0.1 my-project.local`
 
 ### Setting up an SSL certificate
 
@@ -56,7 +56,7 @@ Once `mkcert` is installed, we need to generate our local development root certi
 
 Then, generate the certificates for this project and put them into a location accessible to your docker setup:
 
-`mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.test`
+`mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.local`
 
 ### Node environment
 The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh). Volta will read the pinned versions of Node and npm from the `package.json` so you can be sure you're using the correct versions.
@@ -112,7 +112,7 @@ Run these commands to finish the local development setup
 * `docker/bin/artisan horizon:install`
 * `docker/bin/artisan migrate --seed`
 
-You're good to go - surf to https://my-project.test:30080  (or a different host/port if you've configured it)
+You're good to go - surf to https://my-project.local:30080  (or a different host/port if you've configured it)
 
 You can also use any normal database management tools and connect to the database using the port specified in `.env`.
 
