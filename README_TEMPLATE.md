@@ -26,9 +26,12 @@ To get started with local development, follow these steps. Make sure you run all
 
 > Decide on a local domain to use for this project. Substitute that any place you see `my-project.local` or `my-project` below.
 
-By default, this project will run on the host `my-project.local`. This requires some sort of local DNS resolution for that hostname
-to your localhost IP address. One easy way to do this for the entire `.local` top-level domain, is to run a lightweight tool
-called `dnsmasq`. You can install it via Homebrew on a Mac with: `brew install dnsmasq`.
+By default, this project will run on the host `my-project.local`.
+OrbStack (see below) is already configured to serve on this top-level domain.
+
+If you're not using OrbStack, you will need some sort of local DNS resolution for that hostname to your localhost IP address.
+One easy way to do this for the entire `.local` top-level domain, is to run a lightweight tool called `dnsmasq`.
+You can install it via Homebrew on a Mac with: `brew install dnsmasq`.
 
 > If you've ever setup Valet, it already installed dnsmasq for you. You can verify if it's already installed by running
 > `brew services` and see if `dnsmasq` is listed.
@@ -59,19 +62,20 @@ Then, generate the certificates for this project and put them into a location ac
 `mkcert -cert-file docker/nginx/ssl.pem -key-file docker/nginx/key.pem my-project.local`
 
 ### Node environment
-The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh). Volta will read the pinned versions of Node and npm from the `package.json` so you can be sure you're using the correct versions.
+The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh).
+Volta will read the pinned versions of Node and npm from the `package.json` so you can be sure you're using the correct versions.
 
 ### Get the project running in Docker
 
 Docker is used for local development. It's self-contained, easy to set up, and matches the exact versions of key services
-running in production. It requires that you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
+running in production. We use [OrbStack](https://orbstack.dev) as our Docker engine, since it handles domain resolution and port mapping.
+This config also works with [Docker Desktop](https://www.docker.com/products/docker-desktop/), but you may need to add explicit port mappings.
 
 **Setup the environment**
 
-Make a copy of the example env file: `cp .env.example .env`
+Open the `.env.example` file and update the `COMPOSE_PROJECT_NAME` and `DOCKER_SERVER_NAME` settings to match your project.
 
-Open the `.env` file and review the settings prefixed with `DOCKER_`. The defaults should work, but if you want a different
-host name, or to change the port numbers, make those modifications before continuing with the Docker setup.
+Make a copy of the example env file: `cp .env.example .env`
 
 **Get Docker running**
 
@@ -112,7 +116,7 @@ Run these commands to finish the local development setup
 * `docker/bin/artisan horizon:install`
 * `docker/bin/artisan migrate --seed`
 
-You're good to go - surf to https://my-project.local:30080  (or a different host/port if you've configured it)
+You're good to go - surf to https://my-project.local
 
 You can also use any normal database management tools and connect to the database using the port specified in `.env`.
 
