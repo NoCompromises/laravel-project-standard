@@ -1,4 +1,4 @@
-FROM php:8.3.8-fpm-alpine3.20 as base
+FROM php:8.3.11-fpm-alpine3.20 AS base
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     freetype-dev \
@@ -21,7 +21,7 @@ COPY --from=composer:2.7.7 /usr/bin/composer /usr/bin/composer
 
 COPY docker-php-file-uploads.ini /usr/local/etc/php/conf.d/docker-php-file-uploads.ini
 
-FROM base as debug
+FROM base AS debug
 
 # Supports xdebug
 RUN apk add --update linux-headers

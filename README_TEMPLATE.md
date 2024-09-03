@@ -41,8 +41,9 @@ If you don't want to run `dnsmasq`, you can also add a manual DNS entry to your 
 
 ### Setting up an SSL certificate
 
-First, you'll need to create an SSL certificate that can be used inside Docker. We'll use `mkcert`, a simple tool for
-making locally-trusted development certificates.
+Orbstack provides automatic TLS certificates for `.local` domains, but we will also need to create one that Vite can use.
+
+To do this, we'll use `mkcert`, a simple tool for making locally-trusted development certificates.
 
 To install on Mac with Homebrew, you can run:
 
@@ -60,6 +61,8 @@ Once `mkcert` is installed, we need to generate our local development root certi
 Then, generate the certificates for this project and put them into a location accessible to your docker setup:
 
 `mkcert -cert-file docker/vite/ssl.pem -key-file docker/vite/key.pem my-project.test`
+
+We're using the `.test` top-level domain for the Vite server.
 
 ### Node environment
 The best option to ensure you're using the correct versions of Node and npm with this project is to install [Volta](https://volta.sh).
