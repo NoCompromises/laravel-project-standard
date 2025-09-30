@@ -16,8 +16,6 @@ trait CreatesActingAs
 
     /**
      * Create an acting as user, save it, and return it
-     *
-     * Note that this uses the config option, but it can be overridden by the other option
      */
     protected function createActingAs(array $properties = []): User
     {

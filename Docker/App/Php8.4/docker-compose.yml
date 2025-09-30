@@ -1,0 +1,16 @@
+name: my-project
+
+services:
+    app:
+        container_name: "my-project-app"
+        # Gitlab built `image: registry.gitlab.com/my-project/v3/app/app-image-dev:latest`
+        # Github built `image: ghcr.io/my-project/my-project.com-app-image-dev:latest`
+        working_dir: /app
+        restart: unless-stopped
+        volumes:
+            - .:/app
+        environment:
+          PHP_IDE_CONFIG: "serverName=my-app.local"
+
+networks:
+    default:

@@ -3,13 +3,17 @@ includes:
     - ./vendor/phpstan/phpstan-mockery/extension.neon
 
 parameters:
-    tmpDir: .phpstan.cache
+    tmpDir: .phpstan.cache # add to .gitignore
 
     paths:
         - app
+        - routes
         - tests
 
     level: 5
 
     # Larastan configuration
-    checkModelProperties: true
+    noEnvCallsOutsideOfConfig: true
+    checkModelAppends: true
+
+    editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
