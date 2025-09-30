@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-source "`dirname $0`/../../.env"
-
-# purposely not using the debug container to keep tests as fast as possible
-docker exec -it "$COMPOSE_PROJECT_NAME"-php-fpm vendor/bin/phpunit "$@"

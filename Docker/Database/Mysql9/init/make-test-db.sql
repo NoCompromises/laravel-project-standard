@@ -1,0 +1,2 @@
+CREATE DATABASE apptest;
+GRANT ALL PRIVILEGES ON *.* TO 'app'@'%';

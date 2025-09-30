@@ -1,0 +1,26 @@
+name: my-project
+
+services:
+  database:
+    container_name: "my-project-database"
+    image: mysql:9.0.1
+    volumes:
+      - database-data:/var/lib/mysql
+      - ./docker/database/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    restart: unless-stopped
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 3s
+      timeout: 2s
+      retries: 50
+
+volumes:
+  database-data:
+
+networks:
+  default:

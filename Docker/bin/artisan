@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-source "`dirname $0`/../../.env"
-
-# artisan uses the debug container so we can more step-debug commands
-docker exec -it "$COMPOSE_PROJECT_NAME"-php-fpm-debug ./artisan "$@"

@@ -1,0 +1,18 @@
+name: my-project
+
+services:
+    pdf:
+        container_name: "my-project-pdf"
+        image: gotenberg/gotenberg:8.23.0
+        environment:
+            - "CHROMIUM_IGNORE_CERTIFICATE_ERRORS=true"
+        extra_hosts:
+            - "my-project.test:host-gateway" # required for loading vite assets - if configured to run at .test
+        healthcheck:
+            test: ["CMD", "curl", "--fail", "http://localhost:3000/health"]
+            start_period: 3s
+            timeout: 2s
+            retries: 50
+
+networks:
+    default:
