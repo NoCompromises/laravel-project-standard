@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-source "`dirname $0`/../../.env"
-
-docker exec -it "$COMPOSE_PROJECT_NAME"-php-fpm-debug /usr/bin/env sh

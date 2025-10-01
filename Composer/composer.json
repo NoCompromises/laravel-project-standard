@@ -1,0 +1,38 @@
+{
+    "name": "nocompromises/my-project",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.4",
+        "ext-pdo": "*",
+        "ext-redis": "^6.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "scripts": {
+        "lint": [
+            "echo \"No lints configured yet\""
+        ],
+        "test": [
+            "echo \"No tests configured yet\""
+        ],
+        "ci": [
+            "@composer lint",
+            "@composer test"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {}
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts-descriptions": {
+        "lint": "Runs all of the linters",
+        "test": "Runs all of the unit tests",
+        "ci": "Runs tasks that should be done for integration: code sniffing, static analysis, and tests",
+    }
+}

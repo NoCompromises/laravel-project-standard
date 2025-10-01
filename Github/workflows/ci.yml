@@ -1,0 +1,97 @@
+name: Default Project CI
+
+on: push
+
+jobs:
+  code-standards-and-tests:
+    name: Code Standards and Tests
+    runs-on: ubuntu-24.04
+
+    if: "!contains(github.event.head_commit.message, '[no-ci]')"
+
+    env:
+      PROJECT_NAME: my-project
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Setup default environment
+        run: cp .env.example .env
+
+      - name: Log in to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ vars.GH_REGISTRY_USERNAME }}
+          password: ${{ secrets.GH_REGISTRY_PAT }}
+
+      - name: Build Docker containers and start them
+        run: docker compose up app database -d --wait
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install PHP Dependencies
+        run: docker exec "$PROJECT_NAME-app" /usr/bin/env sh -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader"
+
+      - name: CI Cache
+        run: docker exec "$PROJECT_NAME-app" composer run ci-cache
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Set up Volta to manage Node/Npm versions
+        uses: volta-cli/action@v4
+
+      - name: Install JS dependencies
+        run: npm install
+
+      - name: Build JS dependencies
+        run: npm run build
+
+      - name: Run JS ESLint
+        run: npm run lint
+
+      - name: Run JS test suite
+        run: LARAVEL_BYPASS_ENV_CHECK=1 npm test
+
+
+      - name: Cache Larastan result cache
+        uses: actions/cache@v4
+        with:
+          path: .phpstan.cache
+          key: "phpstan-result-cache-${{ github.run_id }}" # always unique key - always writes a new cache
+          restore-keys: | # prefix allows it to use previous cache as starting point
+            phpstan-result-cache-
+
+      - name: Cache php-cs-fixer result cache
+        uses: actions/cache@v4
+        with:
+          path: .php-cs-fixer.cache
+          key: "php-cs-fixer-result-cache-${{ github.run_id }}" # always unique key - always writes a new cache
+          restore-keys: | # prefix allows it to use previous cache as starting point
+            php-cs-fixer-result-cache-
+
+      - name: Run CI tools
+        run: docker exec "$PROJECT_NAME-app" /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer ci"
+
+#      - name: Deploy to staging if develop branch
+#        if: github.ref == 'refs/heads/develop'
+#        run: curl -s ${{ secrets.ENVOYER_STAGING_TRIGGER }}
+#
+#      - name: Deploy to prod if main branch
+#        if: github.ref == 'refs/heads/main'
+#        run: curl -s ${{ secrets.ENVOYER_PROD_TRIGGER }}

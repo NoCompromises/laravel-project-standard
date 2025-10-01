@@ -1,0 +1,14 @@
+name: my-project
+
+services:
+  jobs:
+    container_name: "my-project-jobs"
+    # Gitlab built `image: registry.gitlab.com/my-project/v3/app/jobs-image:latest`
+    # Github built `image: ghcr.io/my-project/my-project.com-jobs-image:latest`
+    working_dir: /app
+    volumes:
+      - .:/app
+    restart: no
+
+networks:
+    default:

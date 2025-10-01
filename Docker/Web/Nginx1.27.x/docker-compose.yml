@@ -1,0 +1,16 @@
+name: my-project
+
+services:
+    web:
+        container_name: "my-project-web"
+        # Gitlab built `image: registry.gitlab.com/my-project/v3/app/web-image:latest`
+        # Github built `image: ghcr.io/my-project/my-project.com-web-image:latest`
+        working_dir: /app
+        restart: unless-stopped
+        labels:
+            - dev.orbstack.domains=my-project.local
+        volumes:
+            - .:/app
+
+networks:
+    default:

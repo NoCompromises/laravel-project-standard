@@ -1,0 +1,20 @@
+name: my-project
+
+services:
+    cache:
+        container_name: "my-project-cache"
+        image: redis:7.4.2-alpine3.21
+        restart: unless-stopped
+        healthcheck:
+            test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+            start_period: 3s
+            timeout: 2s
+            retries: 50
+        volumes:
+            - cache-data:/data
+
+volumes:
+    cache-data:
+
+networks:
+    default:

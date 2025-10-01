@@ -1,0 +1,22 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+    - ./vendor/phpstan/phpstan-mockery/extension.neon
+
+rules:
+    - App\AuditManyToManyChanges # optional rule for when using auditing package
+
+parameters:
+    tmpDir: .phpstan.cache # add to .gitignore
+
+    paths:
+        - app
+        - routes
+        - tests
+
+    level: 5
+
+    # Larastan configuration
+    noEnvCallsOutsideOfConfig: true
+    checkModelAppends: true
+
+    editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'

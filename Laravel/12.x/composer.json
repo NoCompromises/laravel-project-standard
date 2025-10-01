@@ -1,0 +1,90 @@
+{
+  "license": "UNLICENSED",
+  "require": {
+    "league/flysystem-aws-s3-v3": "^3.0",
+    "maatwebsite/excel": "^3.1",
+    "owen-it/laravel-auditing": "^14.0",
+    "robsontenorio/mary": "^2.4",
+    "spatie/laravel-permission": "^6.16",
+    "spatie/laravel-query-builder": "^6.3"
+  },
+  "require-dev": {
+    "barryvdh/laravel-ide-helper": "^3.5",
+    "roave/security-advisories": "dev-latest"
+  },
+  "scripts": {
+    "ci": [
+      "@composer phpcs",
+      "@composer rector",
+      "@composer larastan",
+      "@composer test"
+    ],
+    "ci-cache": [
+      "@php artisan view:cache",
+      "@php artisan route:cache"
+    ],
+    "ide-helper-update": [
+      "@php artisan clear-compiled",
+      "@php artisan ide-helper:generate",
+      "@php artisan ide-helper:meta",
+      "@php artisan ide-helper:models --write --reset",
+      "@composer phpcs-fix"
+    ],
+    "larastan": [
+      "@php vendor/bin/phpstan analyse -v"
+    ],
+    "laravel-cache": [
+      "@php artisan view:cache"
+    ],
+    "phpcs": [
+      "php-cs-fixer check -v"
+    ],
+    "phpcs-fix": [
+      "php-cs-fixer fix"
+    ],
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover --ansi"
+    ],
+    "post-update-cmd": [
+      "@php artisan clear-compiled",
+      "@php artisan ide-helper:generate",
+      "@php artisan ide-helper:meta",
+      "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+    ],
+    "prod-cache": [
+      "@php artisan config:cache",
+      "@php artisan view:cache",
+      "@php artisan route:cache",
+      "@php artisan orbit:cache",
+      "@php artisan filament:optimize"
+    ],
+    "rector": [
+      "@php vendor/bin/rector --dry-run"
+    ],
+    "rector-fix": [
+      "@php vendor/bin/rector"
+    ],
+    "test": [
+      "phpunit"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "dont-discover": [
+        "laravel/telescope"
+      ]
+    }
+  },
+  "scripts-descriptions": {
+    "ci": "These are the CI tests and code standards tools that run.",
+    "ci-cache": "This runs all of the Laravel cache functionality besides config. (Config is off because that is part of a container start up using ENV vars.)",
+    "larastan": "Runs the PHPStan with Laravel plugin.",
+    "phpcs": "The PHP Code Sniffer tester.",
+    "phpcs-fix": "Automatically fixes any sniffs it can.",
+    "prod-cache": "Caching that should be run in production for full optimization.",
+    "rector": "Runs Rector and reports errors",
+    "rector-fix": "Runs Rector and automatically fixes errors",
+    "test": "PHPUnit tests for Laravel."
+  }
+}

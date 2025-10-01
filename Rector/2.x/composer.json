@@ -1,0 +1,18 @@
+{
+    "require-dev": {
+        "driftingly/rector-laravel": "^2.0",
+        "rector/rector": "^2.0"
+    },
+    "scripts": {
+        "rector": [
+            "@php vendor/bin/rector --dry-run"
+        ],
+        "rector-fix": [
+            "@php vendor/bin/rector"
+        ]
+    },
+    "scripts-descriptions": {
+        "rector": "Runs Rector and reports errors",
+        "rector-fix": "Runs Rector and automatically fixes errors"
+    }
+}
