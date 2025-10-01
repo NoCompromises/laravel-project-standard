@@ -36,5 +36,5 @@ return RectorConfig::configure()
     ->withRules([
         // will add these as the project matures
     ])
-    ->withTypeCoverageLevel(5) // max level is 36
-    ->withDeadCodeLevel(46); // max level is 50
+    ->withTypeCoverageLevel(1) // max level is 36
+    ->withDeadCodeLevel(1); // max level is 50
