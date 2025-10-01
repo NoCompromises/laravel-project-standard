@@ -23,7 +23,6 @@
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="APP_KEY" value="base64:tnGs4PMYS37KL+9JZrbI8O4E4ejefPOKw8Z1qFKmH3U="/>
-        <env name="CIPHERSWEET_KEY" value="8a0682ebeab2a166e94bf07f95fbf88e4357d93e8e43efaba46533771f64d9d4"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_STORE" value="array"/>
         <env name="DB_DATABASE" value="apptest"/>
@@ -31,7 +30,7 @@
         <env name="QUEUE_CONNECTION" value="null"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
-        <env name="USERBACK_TOKEN" value="do-not-use"/>
+        <env name="EXTERNAL_SERVICE_TOKEN" value="do-not-use"/>
     </php>
     <source>
         <include>

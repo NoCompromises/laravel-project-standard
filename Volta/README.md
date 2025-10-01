@@ -17,20 +17,3 @@ To install specific versions of Node and npm, run:
 ```
 volta install node@22
 ```
-
-
-
-
-
-
-
-
-
-
-### Node/npm
-
-If you want to change the version of `node`, run `volta pin node@XYZ` where `XYZ` is the desired version. The same works for `npm` with `volta pin npm@XYZ`
-
-This will update the corresponding sections of the `volta` object in `package.json`.
-
-To verify the correct version is now running, you can run `node -v` or `npm -v`.

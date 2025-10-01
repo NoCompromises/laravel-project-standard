@@ -33,7 +33,7 @@ jobs:
             *.cache-to=type=gha,scope=${{github.ref}},mode=max
 
       - name: Build Docker containers and start them
-        run: docker compose up -d mysql mysql-test php-fpm --wait --no-build
+        run: docker compose up -d mysql app --wait --no-build
 
       - name: Cache composer dependencies
         uses: actions/cache@v4
@@ -43,15 +43,6 @@ jobs:
 
       - name: Install PHP Dependencies
         run: docker exec "$PROJECT_NAME-php-fpm" /usr/bin/env sh -c "COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --no-scripts --no-progress --prefer-dist"
-
-      - name: Failure debug
-        if: ${{ failure() }}
-        run: |
-          docker ps -a
-          docker logs --timestamps "$PROJECT_NAME-php-fpm"
-          docker logs --timestamps "$PROJECT_NAME-mysql"
-          docker inspect "$PROJECT_NAME-php-fpm"
-          docker inspect "$PROJECT_NAME-mysql"
 
       - name: Cache npm dependencies
         uses: actions/cache@v4
@@ -69,10 +60,10 @@ jobs:
         run: LARAVEL_BYPASS_ENV_CHECK=1 npm test
 
       - name: Cache routes
-        run: docker exec "$PROJECT_NAME-php-fpm" ./artisan route:cache
+        run: docker exec "$PROJECT_NAME-app" ./artisan route:cache
 
       - name: Cache views
-        run: docker exec "$PROJECT_NAME-php-fpm" ./artisan view:cache
+        run: docker exec "$PROJECT_NAME-app" ./artisan view:cache
 
       - name: Cache Larastan result cache
         uses: actions/cache@v4
@@ -91,11 +82,7 @@ jobs:
             php-cs-fixer-result-cache-
 
       - name: Run CI tools
-        run: docker exec "$PROJECT_NAME-php-fpm" /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer ci"
-
-      - name: Check logs if you need to debug a failing test
-        if: ${{ failure() }}
-        run: docker exec "$PROJECT_NAME-php-fpm" cat storage/logs/laravel.log
+        run: docker exec "$PROJECT_NAME-app" /usr/bin/env sh -c "COMPOSER_MEMORY_LIMIT=-1 composer ci"
 
 #      - name: Deploy to staging if develop branch
 #        if: github.ref == 'refs/heads/develop'

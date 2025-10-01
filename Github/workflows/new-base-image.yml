@@ -41,8 +41,8 @@ jobs:
           context: ./docker/web
           push: true
           tags: |
-            ghcr.io/oad-llc/app.oadllc.com-web-image:${{ github.sha }}
-            ghcr.io/oad-llc/app.oadllc.com-web-image:latest
+            ghcr.io/my-project/my-project.com-web-image:${{ github.sha }}
+            ghcr.io/my-project/my-project.com-web-image:latest
 
       - name: Build and push app
         if: ${{ inputs.image == 'app' }}
@@ -56,8 +56,8 @@ jobs:
           cache-to: type=gha
           cache-from: type=gha
           tags: |
-            ghcr.io/oad-llc/app.oadllc.com-app-image:${{ github.sha }}
-            ghcr.io/oad-llc/app.oadllc.com-app-image:latest
+            ghcr.io/my-project/my-project.com-app-image:${{ github.sha }}
+            ghcr.io/my-project/my-project.com-app-image:latest
 
       - name: Build and push app-dev
         if: ${{ inputs.image == 'app-dev' }}
@@ -71,8 +71,8 @@ jobs:
           cache-from: type=gha
           push: true
           tags: |
-            ghcr.io/oad-llc/app.oadllc.com-app-image-dev:${{ github.sha }}
-            ghcr.io/oad-llc/app.oadllc.com-app-image-dev:latest
+            ghcr.io/my-project/my-project.com-app-image-dev:${{ github.sha }}
+            ghcr.io/my-project/my-project.com-app-image-dev:latest
 
       - name: Build and push jobs
         if: ${{ inputs.image == 'jobs' }}
@@ -85,5 +85,5 @@ jobs:
           cache-to: type=gha
           cache-from: type=gha
           tags: |
-            ghcr.io/oad-llc/app.oadllc.com-jobs-image:${{ github.sha }}
-            ghcr.io/oad-llc/app.oadllc.com-jobs-image:latest
+            ghcr.io/my-project/my-project.com-jobs-image:${{ github.sha }}
+            ghcr.io/my-project/my-project.com-jobs-image:latest
