@@ -1,6 +1,6 @@
 # Laravel Horizon
 
-The horizon container can be found in the Docker configuration directory.  These instructions are for usage of the container after it is running.
+The horizon container can be found in the Docker configuration directory under `jobs`.  These instructions are for usage of the container after it is running.
 
 ## Running Horizon
 
