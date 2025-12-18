@@ -12,6 +12,6 @@
         "larastan": "Runs the PHPStan with Laravel plugin."
     },
     "scripts-aliases": {
-        "phpstan": ["larastan"]
+        "larastan": ["phpstan"]
     }
 }
