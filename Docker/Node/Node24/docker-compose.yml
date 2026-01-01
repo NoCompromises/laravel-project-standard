@@ -1,0 +1,25 @@
+name: my-project
+
+services:
+    node:
+        container_name: "my-project-node"
+        image: node:24-alpine
+        working_dir: /app
+        volumes:
+            - .:/app
+        init: true
+        tty: true
+        stdin_open: true
+        command: sleep infinity
+        restart: unless-stopped
+        labels:
+            - dev.orbstack.domains=vite.my-project.local
+            - dev.orbstack.http-port=5173
+        healthcheck:
+            test: ["CMD", "node", "--version"]
+            start_period: 3s
+            timeout: 2s
+            retries: 10
+
+networks:
+    default:
